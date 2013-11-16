@@ -1,0 +1,5 @@
+SRS
+Accurately Predicts future Power usage: Essential
+Machine Interface that takes in CSV with null values, and returns filled CSV with predictions: Essential
+Human Dashboard Interface with live predictions (accesses data through Pulse API): Desired
+Gives 75% Confidence bounds: Optional

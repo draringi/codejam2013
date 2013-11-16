@@ -1,0 +1,11 @@
+Sustainablity!
+Demand Responce (respond to Energy Demand)
+Devise an application that can provide accurate, real-time, power demand for a 16 hour window.
+
+Machine Interface: takes in csv and output prediction
+Dashboard: Live predicitions
+
+Bonus Question:
+Confidence Intervals: (75% confidence)
+
+Sort through what's important in the stats.
