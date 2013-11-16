@@ -19,7 +19,7 @@ type Dashboard struct {
 }
 
 func (self *Dashboard) Init () {
-	channel = make(chan (*data.CSVData), 1)
+	self.channel = make(chan (*data.CSVData), 1)
 	forecasting.PredictPulse(channel)
 	go func () {
 		for {
