@@ -16,14 +16,10 @@ type MachineInterface struct {
 	parser *data.DataSource
 }
 
-func recordToString(record data.Record) []string{
-	stringRecord := make([]string, 6)
-	stringRecord[0] = record.Time.Format(data.ISO)
-	stringRecord[1] = strconv.FormatFloat(record.Radiation,'f', -1, 64)
-	stringRecord[2] = strconv.FormatFloat(record.Humidity,'f', -1, 64)
-	stringRecord[3] = strconv.FormatFloat(record.Temperature,'f', -1, 64)
-	stringRecord[4] = strconv.FormatFloat(record.Wind,'f', -1, 64)
-	stringRecord[5] = strconv.FormatFloat(record.Power,'f', -1, 64)
+func recordToString(record data.CSVData) []string{
+	stringRecord := make([]string, 2)
+	stringRecord[0] = record.Data.Time.Format(data.ISO)
+	stringRecord[1] = strconv.FormatFloat(record.Data.Power,'f', -1, 64)
 	return stringRecord
 }
 
@@ -38,6 +34,9 @@ func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Re
 	}
 	out := csv.NewWriter(w)
 	self.records = forecasting.PredictCSVSingle(upload)
+	labels := make([]string, 2)
+	labels[0] = self.records.Labels[0]
+	labels[1] = self.records.Labels[5]
 	err = out.Write(self.records.Labels)
 	for i := 0; i<len(self.records.Data); i++ {
 		out.Write(recordToString(self.records.Data[i]))

@@ -60,10 +60,14 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	for i := 0; i<len(inputs); i++ {
 		outputs = append (outputs, forest.Predicate(inputs[i]))
 	}
+	solution := new(data.CSVData)
+	solution.Labels = resp.Labels
+	solution.Data = make([]Record, len(outputs))
 	k:=0
 	for i := 0; i<len(resp.Data); i++ {
 		if resp.Data[i].Null {
-			resp.Data[i].Power, _ = strconv.ParseFloat(outputs[k], 64)
+			solution.Data[k].Time = resp.Data[i].Time
+			solution.Data[k].Power, _ = strconv.ParseFloat(outputs[k], 64)
 			k++
 			resp.Data[i].Null = false
 		}
