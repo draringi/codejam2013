@@ -51,7 +51,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 func fillRecords (emptyData []Record) (data []Record){
 	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
 	for i := 0; i<len(emptyData); i++ {
-		if emptyData[i].empty {
+		if emptyData[i].empty && i > 0 {
 			emptyData[i].Radiation = emptyData[i-1].Radiation + gradRad
 			emptyData[i].Humidity = emptyData[i-1].Humidity + gradHumidity
 			emptyData[i].Temperature = emptyData[i-1].Temperature + gradTemp
