@@ -6,7 +6,7 @@ import (
 	"../data"
 	"encoding/csv"
 	"fmt"
-	"time"
+//	"time"
 	"strconv"
 )
 
@@ -27,20 +27,20 @@ func recordToString(record data.Record) []string{
 	return stringRecord
 }
 
-func (*MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Request) {
+func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Request) {
 	upload, uploadHeader, err := request.FormFile("file")
 	if err != nil {
 		fmt.Fprint(w, "Error: a file is needed")
 		return
 	}
 	out := csv.NewWriter(w)
-	if parser == nil {
-		parser = data.CreateDataSource()
+	if self.parser == nil {
+		self.parser = data.CreateDataSource()
 	}
-	records = forecasting.PredictCSV(upload, parser.CSVChan)
-	err = out.Write(records.Labels)
-	for i := 0; i<len(records.Data); i++ {
-		out.Write(recordToString(records.Data[i]))
+	self.records = forecasting.PredictCSV(upload, parser.CSVChan)
+	err = out.Write(self.records.Labels)
+	for i := 0; i<len(self.records.Data); i++ {
+		out.Write(recordToString(self.records.Data[i]))
 	}
 	out.Flush()
 	return
