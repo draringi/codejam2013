@@ -72,7 +72,7 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 			resp.Data[i].Null = false
 		}
 	}
-	return resp
+	return solution
 }
 
 
