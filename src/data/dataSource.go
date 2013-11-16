@@ -1,4 +1,4 @@
-package dataSource
+package data
 
 import (
 	"time"
