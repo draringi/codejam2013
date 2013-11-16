@@ -19,7 +19,7 @@ func buildData (data []data.Record) (inputs [][]interface{} , targets []string){
 		row[3]=data[i].Temperature
 		row[4]=data[i].Wind
 		inputs = append(inputs,row)
-		targets = append(targets,data[i].Power)
+		targets = append(targets,strconv.FormatFloat(data[i].Power,'f', -1, 64))
 	}
 	return
 }
