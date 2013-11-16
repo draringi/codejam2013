@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-const ISO = "2006-01-02T15:04Z05:00"
+const ISO = "2006-01-02T15:04-05:00"
 
 type Record struct {
 	Time time.Time
