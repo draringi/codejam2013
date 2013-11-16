@@ -124,28 +124,28 @@ func getFuture (id int, duration string) (resp *http.Response, err error) {
 
 func getFutureData() []data.Record{
 
-	resp, err := getPast(66094, day) // Radiation
+	resp, err := getFuture(66094, day) // Radiation
 	if err != nil {
 		panic(err)
 	}
 	RadList :=  parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 	
-	resp, err = getPast(66095, day) // Humidity
+	resp, err = getFuture(66095, day) // Humidity
 	if err != nil {
 		panic(err)
 	}
 	HumidityList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	resp, err = getPast(66077, day) // Temperature
+	resp, err = getFuture(66077, day) // Temperature
 	if err != nil {
 		panic(err)
 	}
 	TempList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	resp, err = getPast(66096, day) // Wind
+	resp, err = getFuture(66096, day) // Wind
 	if err != nil {
 		panic(err)
 	}
@@ -158,11 +158,11 @@ func getFutureData() []data.Record{
 		records[i].Null = true
 	}
 	for i := 0; i < len(WindList); i++ {
-		records[i*4].Time = RadList[i].Date
+		records[i*4].Time = time.Parse(ISO,RadList[i].Date)
 		records[i*4].Radiation = RadList[i].Value
-		records[i*4].Humidity = RadList[i].HumidityList
-		records[i*4].Temperature = RadList[i].TempList
-		records[i*4].Wind = RadList[i].WindList
+		records[i*4].Humidity = HumidityList[i].Value
+		records[i*4].Temperature = TempList[i].Value
+		records[i*4].Wind = WindList[i].Value
 		records[i*4].Empty = false
 	}
 	return fillRecords(records)
