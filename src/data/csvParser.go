@@ -39,6 +39,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 			data[i-1].null = true
 		}
 	}
+	data = fillRecords (data)
 	return
 }
 
