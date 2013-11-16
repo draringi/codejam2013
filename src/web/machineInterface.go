@@ -6,7 +6,7 @@ import (
 	"../data"
 	"encoding/csv"
 	"fmt"
-	"time
+	"time"
 	"strconv"
 )
 
