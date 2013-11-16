@@ -62,7 +62,7 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	}
 	solution := new(data.CSVData)
 	solution.Labels = resp.Labels
-	solution.Data = make([]Record, len(outputs))
+	solution.Data = make([]data.Record, len(outputs))
 	k:=0
 	for i := 0; i<len(resp.Data); i++ {
 		if resp.Data[i].Null {
