@@ -33,7 +33,7 @@ type DataSource struct {
 	PulseChan chan (chan *Record)
 }
 
-func CreateDataSource () (DataSource) {
+func CreateDataSource () (*DataSource) {
 	var data DataSource
 	
 	go func () {

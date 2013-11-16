@@ -21,7 +21,7 @@ func buildDataToGuess (data []data.Record) (inputs [][]interface{}){
 	return
 }
 
-func PredictCSV (file io.Reader, channel chan *data.CSVRequest) []data.Record {
+func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *CSVData {
 	forest := learnCSV(file, channel)
 	ret := make(chan (*data.CSVData), 1)
 	request := new(data.CSVRequest)
@@ -48,7 +48,7 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) []data.Record {
 			resp.Data[i].Null = false
 		}
 	}
-	return resp.Data
+	return resp
 }
 
 
