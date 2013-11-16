@@ -66,7 +66,7 @@ func fillRecords (emptyData []Record) (data []Record){
 				gradRad = 0
 				gradHumidity = 0
 				gradTemp = 0
-				gradWind
+				gradWind = 0
 			}
 		}
 	}
