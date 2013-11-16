@@ -34,7 +34,7 @@ type DataSource struct {
 }
 
 func CreateDataSource () (*DataSource) {
-	var data DataSource
+	var data *DataSource
 	
 	go func () {
 		for {
