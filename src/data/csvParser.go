@@ -3,7 +3,7 @@ package data
 import (
 	"encoding/csv"
 	"time"
-	"fmt
+	"fmt"
 	"strconv"
 )
 
