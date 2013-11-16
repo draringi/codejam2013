@@ -44,7 +44,8 @@ func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
 	
 
 func learnCSVSingle (file io.Reader) *RF.Forest {
-	resp := data.CSVParse(file)
+	resp := new(data.CSVData)
+	resp.Labels, resp.Data = data.CSVParse(file)
 	inputs, targets := buildDataToLearn(resp.Data)
 	forest := RF.BuildForest(inputs, targets, len(targets), len(inputs),1)
 	return forest
