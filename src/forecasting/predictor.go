@@ -28,13 +28,32 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *data.CSVData {
 	request.Return = ret
 	request.Request = file
 	channel <- request
-	var resp *data.CSVData
+	resp := new(data.CSVData)
 	for {
 		resp = <-ret
 		if resp != nil {
 			break
 		}
 	}
+	inputs := buildDataToGuess(resp.Data)
+	var outputs []string
+	for i := 0; i<len(inputs); i++ {
+		outputs = append (outputs, forest.Predicate(inputs[i]))
+	}
+	k:=0
+	for i := 0; i<len(resp.Data); i++ {
+		if resp.Data[i].Null {
+			resp.Data[i].Power, _ = strconv.ParseFloat(outputs[k], 64)
+			k++
+			resp.Data[i].Null = false
+		}
+	}
+	return resp
+}
+
+func PredictCSVSingle (file io.Reader) *data.CSVData {
+	forest := learnCSV(file)
+	resp := data.CSVParse(file)
 	inputs := buildDataToGuess(resp.Data)
 	var outputs []string
 	for i := 0; i<len(inputs); i++ {

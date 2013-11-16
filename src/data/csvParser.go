@@ -8,6 +8,10 @@ import (
 	"io"
 )
 
+func CSVParse(file io.Reader) (labels []string, data []Record) {
+	return csvParse(file)
+} 
+
 func csvParse(file io.Reader) (labels []string, data []Record) {
 	reader := csv.NewReader (file)
 	tmpdata, err := reader.ReadAll()

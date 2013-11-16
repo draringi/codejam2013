@@ -37,7 +37,7 @@ func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Re
 		return
 	}
 	out := csv.NewWriter(w)
-	self.records = forecasting.PredictCSV(upload, self.parser.CSVChan)
+	self.records = forecasting.PredictCSVSingle(upload, self.parser.CSVChan)
 	err = out.Write(self.records.Labels)
 	for i := 0; i<len(self.records.Data); i++ {
 		out.Write(recordToString(self.records.Data[i]))

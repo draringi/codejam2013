@@ -30,7 +30,7 @@ func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
 	request.Return = ret
 	request.Request = file
 	channel <- request
-	var resp *data.CSVData
+	resp := new(data.CSVData)
 	for {
 		resp = <-ret
 		if resp != nil {
@@ -42,3 +42,11 @@ func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
 	return forest
 }
 	
+
+func learnCSVSingle (file io.Reader) *RF.Forest {
+	resp := data.CSVParse(file)
+	inputs, targets := buildDataToLearn(resp.Data)
+	forest := RF.BuildForest(inputs, targets, len(targets), len(inputs),1)
+	return forest
+}
+
