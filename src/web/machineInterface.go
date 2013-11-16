@@ -28,7 +28,7 @@ func recordToString(record data.Record) []string{
 }
 
 func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Request) {
-	upload, uploadHeader, err := request.FormFile("file")
+	upload, _, err := request.FormFile("file")
 	if err != nil {
 		fmt.Fprint(w, "Error: a file is needed")
 		return
