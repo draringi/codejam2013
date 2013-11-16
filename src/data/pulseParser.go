@@ -48,6 +48,9 @@ func parseXmlFloat64 (r io.Reader) []record {
 	decoder := xml.NewDecoder(r)
 	var output point
 	err := decoder.Decode(&output)
+	if err != nil {
+		panic(err)
+	}
 	return output.Records.RecordList
 }
 	
