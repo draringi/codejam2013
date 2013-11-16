@@ -47,7 +47,7 @@ type point struct {
 func parseXmlFloat64 (r io.Reader) []record {
 	decoder := xml.NewDecoder(r)
 	var output point
-	err := decoder.decode(&output)
+	err := decoder.Decode(&output)
 	return output.Records.RecordList
 }
 	
