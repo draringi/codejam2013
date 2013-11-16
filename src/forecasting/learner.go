@@ -4,11 +4,12 @@ import (
 	"github.com/fxsjy/RF.go/RF"
 	"io"
 	"../data"
+	"strconv"
 )
 
-func buildData (data []data.Record) (inputs [][]interface{} , targets []float64){
+func buildData (data []data.Record) (inputs [][]interface{} , targets []string){
 	for i := 0; i<len(data); i++ {
-		if data[i].null {
+		if data[i].Null {
 			break
 		}
 		row := make([]interface{},5)

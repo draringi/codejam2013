@@ -18,14 +18,14 @@ type Record struct {
 	Null bool
 }
 
-type CVSData struct {
+type CSVData struct {
 	Labels []string
 	Data []Record
 }
 
 type CSVRequest struct {
 	Request io.Reader
-	Return chan (CVSData)
+	Return chan (CSVData)
 }
 
 type DataSource struct {
@@ -39,10 +39,10 @@ func CreateDataSource () (DataSource) {
 	go func () {
 		for {
 			select {
-			case cvs := <-data.CSVChan:
-				var val CVSData
+			case csv := <-data.CSVChan:
+				var val CSVData
 				val.Labels, val.Data = csvParse(cvs.Request)
-				cvs.Return <-val
+				csv.Return <-val
 				
 			case pulse := <-data.PulseChan:
 				pulse <- new(Record)
