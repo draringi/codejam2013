@@ -28,15 +28,15 @@ func recordToString(record data.Record) []string{
 }
 
 func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Request) {
+	if self.parser == nil {
+		self.parser = data.CreateDataSource()
+	}
 	upload, _, err := request.FormFile("file")
 	if err != nil {
 		fmt.Fprint(w, "Error: a file is needed")
 		return
 	}
 	out := csv.NewWriter(w)
-	if self.parser == nil {
-		self.parser = data.CreateDataSource()
-	}
 	self.records = forecasting.PredictCSV(upload, self.parser.CSVChan)
 	err = out.Write(self.records.Labels)
 	for i := 0; i<len(self.records.Data); i++ {
