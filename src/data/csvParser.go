@@ -48,6 +48,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	}
 	fmt.Println(len(data))
 	data = fillRecords (data)
+	fmt.Println(len(data))
 	return
 }
 
