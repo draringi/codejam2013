@@ -94,7 +94,7 @@ func getPastData() []data.Record {
 	}
 	defer func () {_ = db.Close()} ()
 	records := make([]data.Record, 0)
-	var rows Rows
+	var rows sql.Rows
 	rows, err = db.Query("SELECT * FROM Records;")
 	for rows.Next() {
 		var record data.Record
@@ -158,7 +158,10 @@ func getFutureData() []data.Record{
 		records[i].Null = true
 	}
 	for i := 0; i < len(WindList); i++ {
-		records[i*4].Time = time.Parse(ISO,RadList[i].Date)
+		records[i*4].Time, var err = time.Parse(ISO,RadList[i].Date)
+		if err != nil {
+			panic(err)
+		}
 		records[i*4].Radiation = RadList[i].Value
 		records[i*4].Humidity = HumidityList[i].Value
 		records[i*4].Temperature = TempList[i].Value
@@ -176,8 +179,8 @@ func fillRecords (emptyData []data.Record) (data []data.Record){
 			emptyData[i].Humidity = emptyData[i-1].Humidity + gradHumidity
 			emptyData[i].Temperature = emptyData[i-1].Temperature + gradTemp
 			emptyData[i].Wind = emptyData[i-1].Wind + gradWind
-			emptyData[i].Time = emptyData[i-1].Time + quarter
-			emptyData[i].empty = false
+			emptyData[i].Time = emptyData[i-1].Time.Add(quarter)
+			emptyData[i].Empty = false
 		} else {
 			if i + 4 < len (emptyData) {
 				gradRad = (emptyData[i+4].Radiation - emptyData[i].Radiation)/4
@@ -199,7 +202,7 @@ func PredictPulse (Data chan (*data.CSVData))  {
 	func () {
 		notify := data.Monitor()
 		for {
-			if <-msg {
+			if <-notify {
 				forest := learnData(getPastData())
 				pred := getFutureData()
 				solution := new(data.CSVData)

@@ -21,7 +21,7 @@ const month = "month"
 
 const quarter = (15*time.Minute)
 
-func Monitor (msg chan bool) {
+func Monitor () (msg chan bool) {
 	
 	go func () {
 		msg = make(chan bool, 1)
