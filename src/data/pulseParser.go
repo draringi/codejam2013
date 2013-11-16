@@ -50,7 +50,7 @@ func parseXmlFloat64 (r io.Reader) [][]record(
 	err := decoder.decode(&output)
 	return output.Records.RecordList
 	
-
+/*
 func getPastDay () {
 	resp, err := getPast(66094, day) // Radiation
 	if err != nil {
@@ -70,20 +70,21 @@ func getPastDay () {
 	if err != nil {
 		panic(err)
 	}
-	HumidityList := parseXmlFloat64(resp.Body)
+	TempList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
 	resp, err = getPast(66096, day) // Wind
 	if err != nil {
 		panic(err)
 	}
-	HumidityList := parseXmlFloat64(resp.Body)
+	WindList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 	
 	resp, err = getPast(66095, day) // Power
 	if err != nil {
 		panic(err)
 	}
-	HumidityList := parseXmlFloat64(resp.Body)
+	PowerList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
-
+}
+*/

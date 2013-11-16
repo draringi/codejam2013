@@ -3,7 +3,6 @@ package data
 import (
 	"encoding/csv"
 	"time"
-	"fmt"
 	"strconv"
 	"io"
 )
@@ -19,8 +18,6 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	if  err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(len(tmpdata) - 1)
-	//labels = make([]string, 6)
 	labels = tmpdata[0]
 	data  = make([]Record,  len(tmpdata))
 	for i := 1; i<len(tmpdata); i++ {
@@ -46,15 +43,12 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 			data[i-1].Null = true
 		}
 	}
-	fmt.Println(len(data))
 	data = fillRecords (data)
-	fmt.Println(len(data))
 	return
 }
 
 func fillRecords (emptyData []Record) (data []Record){
 	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
-	fmt.Println(len(emptyData))
 	for i := 0; i<len(emptyData); i++ {
 		if emptyData[i].empty && i > 0 {
 			emptyData[i].Radiation = emptyData[i-1].Radiation + gradRad
