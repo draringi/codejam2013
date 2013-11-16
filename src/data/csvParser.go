@@ -14,10 +14,10 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	if  err != nil {
 		fmt.Println(err)
 	}
-	labels := tmpdata[0]
-	data := make([]Record, len(tmpdata)-1)
+	labels = tmpdata[0]
+	data = make([]Record, len(tmpdata)-1)
 	for i := 1; i<len(tmpdata); i++ {
-		data[i-1].Time = time.Parse(dataSource.ISO, tmpdata[i][0])
+		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
 		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 32)
 		if err != nil {
 			data[i-1].empty = true
@@ -39,6 +39,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 			data[i-1].null = true
 		}
 	}
+	return
 }
 
 func fillRecords (emptyData []Record) (data []Record){
@@ -57,4 +58,5 @@ func fillRecords (emptyData []Record) (data []Record){
 			gradWind = (emptyData[i+4].Wind - emptyData[i].Wind)/4
 		}
 	}
+	return
 }
