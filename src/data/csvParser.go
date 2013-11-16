@@ -23,7 +23,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	//labels = make([]string, 6)
 	labels = tmpdata[0]
 	data  = make([]Record,  len(tmpdata))
-	for i := 1; i<len(tmpdata)-1; i++ {
+	for i := 1; i<len(tmpdata); i++ {
 		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
 		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)
 		if err != nil {
