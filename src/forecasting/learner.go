@@ -29,7 +29,7 @@ func learnCSV (file io.Reader, channel chan data.CSVRequest) *RF.Forest {
 	request.Return = ret
 	request.Request = file
 	channel <- request
-	var resp CVSData
+	var resp CSVData
 	for {
 		if resp <-ret {
 			break

@@ -29,8 +29,8 @@ type CSVRequest struct {
 }
 
 type DataSource struct {
-	CSVChan chan (CSVRequest)
-	PulseChan chan (chan Record)
+	CSVChan chan (*CSVRequest)
+	PulseChan chan (chan *Record)
 }
 
 func CreateDataSource () (DataSource) {
@@ -39,8 +39,8 @@ func CreateDataSource () (DataSource) {
 	go func () {
 		for {
 			select {
-			case cvs := <-data.CVSChan:
-				cvs.Return <- csvParse(cvs.Request)
+			case cvs := <-data.CSVChan:
+				cvs.Return, _ <- csvParse(cvs.Request)
 			case pulse := <-data.PulseChan:
 				pulse <- new(Record)
 			}
