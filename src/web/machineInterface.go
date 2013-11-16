@@ -16,10 +16,10 @@ type MachineInterface struct {
 	parser *data.DataSource
 }
 
-func recordToString(record data.CSVData) []string{
+func recordToString(record data.Record) []string{
 	stringRecord := make([]string, 2)
-	stringRecord[0] = record.Data.Time.Format(data.ISO)
-	stringRecord[1] = strconv.FormatFloat(record.Data.Power,'f', -1, 64)
+	stringRecord[0] = record.Time.Format(data.ISO)
+	stringRecord[1] = strconv.FormatFloat(record.Power,'f', -1, 64)
 	return stringRecord
 }
 
