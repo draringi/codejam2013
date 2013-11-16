@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"draringi/codejam2013/src/forecasting"
 	"draringi/codejam2013/src/data"
-	"html/template"
+//	"html/template"
 	"fmt"
 )
 
@@ -19,7 +19,8 @@ type Dashboard struct {
 }
 
 func (self *Dashboard) Init () {
-	self.channel = forecasting.PredictPulse()
+	channel = make(chan (*data.CSVData), 1)
+	forecasting.PredictPulse(channel)
 	go func () {
 		for {
 			if tmp := <-self.channel {
