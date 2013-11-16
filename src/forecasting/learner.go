@@ -6,7 +6,7 @@ import (
 	"../data"
 )
 
-func buildData (data []Record) (inputs [][]interface{} , targets []float64){
+func buildData (data []data.Record) (inputs [][]interface{} , targets []float64){
 	for i := 0; i<len(data); i++ {
 		if data[i].null {
 			break
@@ -23,8 +23,8 @@ func buildData (data []Record) (inputs [][]interface{} , targets []float64){
 	return
 }
 
-func learnCSV (file io.Reader, channel chan data.CSVRequest) *RF.Forest {
-	ret := make(chan CVSData, 1)
+func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
+	ret := make(chan *CVSData, 1)
 	request := new(data.CSVRequest)
 	request.Return = ret
 	request.Request = file
