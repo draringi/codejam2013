@@ -12,6 +12,8 @@ import (
 )
 
 const quarter = (15*time.Minute)
+const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
+const day = "day"
 
 func buildDataToGuess (data []data.Record) (inputs [][]interface{}){
 	for i := 0; i<len(data); i++ {
@@ -121,8 +123,6 @@ func getFuture (id int, duration string) (resp *http.Response, err error) {
 
 
 func getFutureData() []data.Record{
-	const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
-	const day = "day"
 
 	resp, err := getPast(66094, day) // Radiation
 	if err != nil {
@@ -154,8 +154,8 @@ func getFutureData() []data.Record{
 
 	records := make([]data.Record, 24*4)
 	for i := 0; i < len(records); i++ {
-		records[i].Empty = True
-		records[i].Null = True
+		records[i].Empty = true
+		records[i].Null = true
 	}
 	for i := 0; i < len(WindList); i++ {
 		records[i*4].Time = RadList[i].Date
@@ -168,7 +168,7 @@ func getFutureData() []data.Record{
 	return fillRecords(records)
 }
 
-func fillRecords (emptyData []Record) (data []Record){
+func fillRecords (emptyData []data.Record) (data []data.Record){
 	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
 	for i := 0; i<len(emptyData); i++ {
 		if emptyData[i].Empty && i > 0 {
