@@ -4,7 +4,11 @@ import (
 	"io"
 	"draringi/codejam2013/src/data"
 	"strconv"
+	"time"
+	"encoding/xml"
 )
+
+const quarter = (15*time.Minute)
 
 func buildDataToGuess (data []data.Record) (inputs [][]interface{}){
 	for i := 0; i<len(data); i++ {
@@ -54,7 +58,7 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *data.CSVData {
 func PredictCSVSingle (file io.Reader) *data.CSVData {
 	resp := new(data.CSVData)
 	resp.Labels, resp.Data = data.CSVParse(file)
-	forest := learnCSVSingle( resp.Data)
+	forest := learnData( resp.Data)
 	inputs := buildDataToGuess(resp.Data)
 	var outputs []string
 	for i := 0; i<len(inputs); i++ {
@@ -75,4 +79,159 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	return solution
 }
 
+func getPastData() []data.Record {
+	var db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
+	const db_provider = "postgres"
 
+	var db, err = sql.Open(db_provider, db_connection)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+	records := make([]data.Record, 0)
+	var rows Rows
+	rows, err = db.Query("SELECT * FROM Records;")
+	for rows.Next() {
+		var record data.Record
+		err = rows.Scan(&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
+		if err != nil {
+			record.Empty
+		}
+		records = append(records, record)
+	}
+	return data.FillRecords(records)
+}
+
+func getFuture (id int, duration string) (resp *http.Response, err error) {
+	client := new(http.Client)
+	request, err:= http.NewRequest("GET", "https://api.pulseenergy.com/pulse/1/points/"+strconv.Itoa(id)+"/data.xml?interval="+duration+"&start="+time.Now().Format(data.ISO), nil)
+	if err != nil {
+		return nil, err
+	}
+	request.Header.Add("Authorization", apikey)
+	resp, err = client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+
+func getFutureData() []data.Record{
+	const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
+	const day = "day"
+
+	resp, err := getPast(66094, day) // Radiation
+	if err != nil {
+		panic(err)
+	}
+	RadList :=  parseXmlFloat64(resp.Body)
+	resp.Body.Close()
+	
+	resp, err = getPast(66095, day) // Humidity
+	if err != nil {
+		panic(err)
+	}
+	HumidityList := parseXmlFloat64(resp.Body)
+	resp.Body.Close()
+
+	resp, err = getPast(66077, day) // Temperature
+	if err != nil {
+		panic(err)
+	}
+	TempList := parseXmlFloat64(resp.Body)
+	resp.Body.Close()
+
+	resp, err = getPast(66096, day) // Wind
+	if err != nil {
+		panic(err)
+	}
+	WindList := parseXmlFloat64(resp.Body)
+	resp.Body.Close()
+
+	records := make([]data.Record, 24*4)
+	for i := 0; i < len(records); i++ {
+		records[i].Empty = True
+		records[i].Null = True
+	}
+	for i := 0; i < len(WindList); i++ {
+		records[i*4].Time = RadList[i].Date
+		records[i*4].Radiation = RadList[i].Value
+		records[i*4].Humidity = RadList[i].HumidityList
+		records[i*4].Temperature = RadList[i].TempList
+		records[i*4].Wind = RadList[i].WindList
+		records[i*4].Empty = false
+	}
+	return fillRecords(records)
+}
+
+func fillRecords (emptyData []Record) (data []Record){
+	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
+	for i := 0; i<len(emptyData); i++ {
+		if emptyData[i].Empty && i > 0 {
+			emptyData[i].Radiation = emptyData[i-1].Radiation + gradRad
+			emptyData[i].Humidity = emptyData[i-1].Humidity + gradHumidity
+			emptyData[i].Temperature = emptyData[i-1].Temperature + gradTemp
+			emptyData[i].Wind = emptyData[i-1].Wind + gradWind
+			emptyData[i].Time = emptyData[i-1].Time + quarter
+			emptyData[i].empty = false
+		} else {
+			if i + 4 < len (emptyData) {
+				gradRad = (emptyData[i+4].Radiation - emptyData[i].Radiation)/4
+				gradHumidity = (emptyData[i+4].Humidity - emptyData[i].Humidity)/4
+				gradTemp = (emptyData[i+4].Temperature - emptyData[i].Temperature)/4
+				gradWind = (emptyData[i+4].Wind - emptyData[i].Wind)/4
+			} else {
+				gradRad = 0
+				gradHumidity = 0
+				gradTemp = 0
+				gradWind = 0
+			}
+		}
+	}
+	return emptyData
+}
+
+func PredictPulse (Data chan (*data.CSVData))  {
+	func () {
+		notify := data.Monitor()
+		for {
+			if <-msg {
+				forest := learnData(getPastData())
+				pred := getFutureData()
+				solution := new(data.CSVData)
+				solution.Labels = make([]string, 6)
+				solution.Data = pred
+				rawData := buildDataToGuess(pred)
+				for i := 0; i < len(pred); i++ {
+					forecast := forest.Predicate(rawData[i])
+					solution.Data[i].Power, _ = strconv.ParseFloat(forecast, 64)
+				}
+				Data <- solution
+			} 
+		}
+	} ()
+}
+
+type records struct {
+	RecordList []record `xml:"record"`
+}
+
+type record struct {
+	Date string `xml:"date,attr"`
+	Value float64 `xml:"value,attr"`
+}
+
+type point struct {
+	Records records `xml:"records"`
+}
+
+func parseXmlFloat64 (r io.Reader) []record {
+	decoder := xml.NewDecoder(r)
+	var output point
+	err := decoder.Decode(&output)
+	if err != nil {
+		panic(err)
+	}
+	return output.Records.RecordList
+}

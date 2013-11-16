@@ -17,8 +17,24 @@ const db_provider = "postgres"
 const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
 
 const day = "day"
+const month = "month"
 
 const quarter = (15*time.Minute)
+
+func Monitor (msg chan bool) {
+	
+	go func () {
+		msg = make(chan bool, 1)
+		db_init()
+		getPastUnit(month) //Initialize the db with the past month's data
+		for {
+			getPastUnit(day)
+			msg <- true //tell Predicate to update
+			time.Sleep(quarter) //wait for another 15 mins
+		}
+	} ()
+	return
+}
 
 func db_init() {
 	var db, err = sql.Open(db_provider, db_connection)
@@ -85,36 +101,36 @@ func creativeUpdate(field string, data []record) {
 }
 
 
-func getPastDay () {
-	resp, err := getPast(66094, day) // Radiation
+func getPastUnit (unit string) {
+	resp, err := getPast(66094, unit) // Radiation
 	if err != nil {
 		panic(err)
 	}
 	RadList :=  parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 	
-	resp, err = getPast(66095, day) // Humidity
+	resp, err = getPast(66095, unit) // Humidity
 	if err != nil {
 		panic(err)
 	}
 	HumidityList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	resp, err = getPast(66077, day) // Temperature
+	resp, err = getPast(66077, unit) // Temperature
 	if err != nil {
 		panic(err)
 	}
 	TempList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	resp, err = getPast(66096, day) // Wind
+	resp, err = getPast(66096, unit) // Wind
 	if err != nil {
 		panic(err)
 	}
 	WindList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 	
-	resp, err = getPast(66095, day) // Power
+	resp, err = getPast(66095, unit) // Power
 	if err != nil {
 		panic(err)
 	}

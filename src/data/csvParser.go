@@ -24,33 +24,33 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
 		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)
 		if err != nil {
-			data[i-1].empty = true
+			data[i-1].Empty = true
 		}
 		data[i-1].Humidity, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
-			data[i-1].empty = true
+			data[i-1].Empty = true
 		}
 		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][3], 64)
 		if err != nil {
-			data[i-1].empty = true
+			data[i-1].Empty = true
 		}
 		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][4], 64)
 		if err != nil {
-			data[i-1].empty = true
+			data[i-1].Empty = true
 		}
 		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][5], 64)
 		if err != nil {
 			data[i-1].Null = true
 		}
 	}
-	data = fillRecords (data)
+	data = FillRecords (data)
 	return
 }
 
-func fillRecords (emptyData []Record) (data []Record){
+func FillRecords (emptyData []Record) (data []Record){
 	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
 	for i := 0; i<len(emptyData); i++ {
-		if emptyData[i].empty && i > 0 {
+		if emptyData[i].Empty && i > 0 {
 			emptyData[i].Radiation = emptyData[i-1].Radiation + gradRad
 			emptyData[i].Humidity = emptyData[i-1].Humidity + gradHumidity
 			emptyData[i].Temperature = emptyData[i-1].Temperature + gradTemp

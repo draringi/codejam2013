@@ -14,7 +14,7 @@ type Record struct {
 	Temperature float64
 	Wind float64
 	Power float64
-	empty bool
+	Empty bool
 	Null bool
 }
 
