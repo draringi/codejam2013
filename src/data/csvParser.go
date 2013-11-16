@@ -21,29 +21,31 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	}
 	labels = make([]string, 6)
 	//labels = tmpdata[0]
-	data = make([]Record, len(tmpdata)-1)
+	val data []Record
 	for i := 1; i<len(tmpdata)-1; i++ {
-		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
-		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)
+		rec := new(Record)
+		rec[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
+		rec[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Humidity, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		rec[i-1].Humidity, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		rec[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		rec[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		rec[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].Null = true
 		}
+		data = append(data, rec)
 	}
 	data = fillRecords (data)
 	return
