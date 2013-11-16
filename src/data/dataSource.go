@@ -25,7 +25,7 @@ type CSVData struct {
 
 type CSVRequest struct {
 	Request io.Reader
-	Return chan (CSVData)
+	Return chan (*CSVData)
 }
 
 type DataSource struct {

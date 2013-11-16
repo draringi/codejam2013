@@ -25,7 +25,7 @@ func buildData (data []data.Record) (inputs [][]interface{} , targets []string){
 }
 
 func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
-	ret := make(chan data.CSVData, 1)
+	ret := make(chan (*data.CSVData), 1)
 	request := new(data.CSVRequest)
 	request.Return = ret
 	request.Request = file
