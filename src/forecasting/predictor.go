@@ -37,7 +37,7 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) []data.Record {
 	}
 	inputs := buildDataToGuess(resp.Data)
 	var outputs []string
-	for i := 0; i<len(inputs); i:++ {
+	for i := 0; i<len(inputs); i++ {
 		outputs = append (outputs, forest.Predicate(inputs[i]))
 	}
 	k:=0
