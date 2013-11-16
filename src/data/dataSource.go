@@ -40,7 +40,8 @@ func CreateDataSource () (DataSource) {
 		for {
 			select {
 			case cvs := <-data.CSVChan:
-				val, _ := csvParse(cvs.Request)
+				var val CVSData
+				val.Labels, val.Data = csvParse(cvs.Request)
 				cvs.Return <-val
 				
 			case pulse := <-data.PulseChan:

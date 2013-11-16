@@ -4,19 +4,20 @@ import (
 	"net/http"
 	"encoding/json"
 	"io"
+	"strconv
 )
 
 const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
 
 const day = "day"
 
-func getPast (id int, duration string) (resp http.Response, err error) {
+func getPast (id int, duration string) (resp *http.Response, err error) {
 	client := new(http.Client)
-	request, err:= http.NewRequest("GET", "https://api.pulseenergy.com/pulse/1/points/"+id+"/data.json?interval="+duration, nil)
+	request, err:= http.NewRequest("GET", "https://api.pulseenergy.com/pulse/1/points/"+strconv.Itoa(id)+"/data.json?interval="+duration, nil)
 	if err != nil {
 		return nil, err
 	}
-	request.Header.add("Authorization", apikey)
+	request.Header.Add("Authorization", apikey)
 	resp, err = client.Do(request)
 	if err != nil {
 		return nil, err
