@@ -158,7 +158,8 @@ func getFutureData() []data.Record{
 		records[i].Null = true
 	}
 	for i := 0; i < len(WindList); i++ {
-		records[i*4].Time, var err = time.Parse(ISO,RadList[i].Date)
+		var err error
+		records[i*4].Time, err = time.Parse(ISO,RadList[i].Date)
 		if err != nil {
 			panic(err)
 		}
