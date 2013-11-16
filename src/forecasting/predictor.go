@@ -41,7 +41,7 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) []data.Record {
 		outputs = append (outputs, forest.Predicate(inputs[i]))
 	}
 	k:=0
-	for i = 0; i<len(resp.Data); i++ {
+	for i := 0; i<len(resp.Data); i++ {
 		if resp.Data[i].Null {
 			resp.Data[i].Power, _ = strconv.ParseFloat(outputs[k], 64)
 			k++
