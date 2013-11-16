@@ -53,6 +53,7 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *data.CSVData {
 
 func PredictCSVSingle (file io.Reader) *data.CSVData {
 	forest := learnCSVSingle(file)
+	resp := new(data.CSVData)
 	resp.Labels, resp.Data := data.CSVParse(file)
 	inputs := buildDataToGuess(resp.Data)
 	var outputs []string
