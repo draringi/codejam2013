@@ -55,7 +55,7 @@ func FillRecords (emptyData []Record) (data []Record){
 			emptyData[i].Humidity = emptyData[i-1].Humidity + gradHumidity
 			emptyData[i].Temperature = emptyData[i-1].Temperature + gradTemp
 			emptyData[i].Wind = emptyData[i-1].Wind + gradWind
-			emptyData[i].empty = false
+			emptyData[i].Empty = false
 		} else {
 			if i + 4 < len (emptyData) {
 				gradRad = (emptyData[i+4].Radiation - emptyData[i].Radiation)/4
