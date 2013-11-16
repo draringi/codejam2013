@@ -21,7 +21,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	}
 	labels = make([]string, 6)
 	//labels = tmpdata[0]
-	val data []Record
+	var data []Record
 	for i := 1; i<len(tmpdata)-1; i++ {
 		rec := new(Record)
 		rec[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
