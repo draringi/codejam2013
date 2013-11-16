@@ -9,7 +9,8 @@ import (
 )
 
 func CSVParse(file io.Reader) (labels []string, data []Record) {
-	return csvParse(file)
+	labels, data = csvParse(file)
+	return 
 } 
 
 func csvParse(file io.Reader) (labels []string, data []Record) {
