@@ -6,11 +6,10 @@ import (
 	"io"
 	"strconv"
 	"time"
-//	"database/sql"
+	"database/sql"
 	"os"
+	_ "github.com/jbarham/gopgsqldriver"
 )
-
-//import _ "github.com/jbarham/gopgsqldriver"
 
 const db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
 const db_provider = "postgres"
