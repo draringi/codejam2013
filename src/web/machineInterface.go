@@ -37,7 +37,7 @@ func (self *MachineInterface) ServeHTTP (w http.ResponseWriter, request *http.Re
 	labels := make([]string, 2)
 	labels[0] = self.records.Labels[0]
 	labels[1] = self.records.Labels[5]
-	err = out.Write(self.records.Labels)
+	err = out.Write(labels)
 	for i := 0; i<len(self.records.Data); i++ {
 		out.Write(recordToString(self.records.Data[i]))
 	}
