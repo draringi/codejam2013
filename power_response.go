@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"src/web"
+	"./src/web"
 )
 
 func main() {
