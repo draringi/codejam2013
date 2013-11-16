@@ -33,15 +33,15 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][3], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][4], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 64)
+		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][5], 64)
 		if err != nil {
 			data[i-1].Null = true
 		}
