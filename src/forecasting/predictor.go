@@ -1,7 +1,10 @@
 package forecasting
 
 import (
+	"net/http"
 	"io"
+	"os"
+	"database/sql"
 	"draringi/codejam2013/src/data"
 	"strconv"
 	"time"
@@ -87,7 +90,7 @@ func getPastData() []data.Record {
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	defer func () {_ = db.Close()} ()
 	records := make([]data.Record, 0)
 	var rows Rows
 	rows, err = db.Query("SELECT * FROM Records;")
@@ -95,7 +98,7 @@ func getPastData() []data.Record {
 		var record data.Record
 		err = rows.Scan(&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
 		if err != nil {
-			record.Empty
+			record.Empty=true
 		}
 		records = append(records, record)
 	}

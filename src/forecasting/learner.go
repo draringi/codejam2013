@@ -5,7 +5,6 @@ import (
 	"io"
 	"draringi/codejam2013/src/data"
 	"strconv"
-	"fmt"
 )
 
 func buildDataToLearn (data []data.Record) (inputs [][]interface{} , targets []string){
