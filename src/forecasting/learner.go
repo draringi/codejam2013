@@ -3,7 +3,7 @@ package forecasting
 import (
 	"github.com/fxsjy/RF.go/RF"
 	"io"
-	"data"
+	"../data"
 )
 
 func buildData (data []Record) (inputs [][]interface{} , targets []float64){

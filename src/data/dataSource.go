@@ -45,6 +45,6 @@ func CreateDataSource () (DataSource) {
 				pulse <- new(Record)
 			}
 		}
-	}
+	} ()
 	return data
 }
