@@ -8,7 +8,7 @@ all: web deps
 kaguya:
 	export GOPATH=~/go
 	export PORT=8080
-	cp -R src ~/go/
+	cp -R src ~/go/src/draringi/codejam2013
 	rm -f ~/go/bin/codejam2013
 	rm -fr ~/go/pkg/linux_amd64/draringi
 	go install draringi/codejam2013
