@@ -54,6 +54,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 
 func fillRecords (emptyData []Record) (data []Record){
 	gradRad, gradHumidity, gradTemp, gradWind := 0.0, 0.0, 0.0, 0.0
+	fmt.Println(len(emptyData))
 	for i := 0; i<len(emptyData); i++ {
 		if emptyData[i].empty && i > 0 {
 			emptyData[i].Radiation = emptyData[i-1].Radiation + gradRad
@@ -75,5 +76,5 @@ func fillRecords (emptyData []Record) (data []Record){
 			}
 		}
 	}
-	return
+	return emptyData
 }
