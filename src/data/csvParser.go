@@ -19,6 +19,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	if  err != nil {
 		fmt.Println(err)
 	}
+	labels = make([]string, 6)
 	labels = tmpdata[0]
 	data = make([]Record, len(tmpdata)-1)
 	for i := 1; i<len(tmpdata)-1; i++ {
