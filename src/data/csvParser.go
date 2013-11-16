@@ -18,23 +18,23 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 	data = make([]Record, len(tmpdata)-1)
 	for i := 1; i<len(tmpdata); i++ {
 		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
-		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 32)
+		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Humidity, err = strconv.ParseFloat(tmpdata[i][2], 32)
+		data[i-1].Humidity, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][2], 32)
+		data[i-1].Temperature, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][2], 32)
+		data[i-1].Wind, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].empty = true
 		}
-		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 32)
+		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 64)
 		if err != nil {
 			data[i-1].Null = true
 		}

@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func buildData (data []data.Record) (inputs [][]interface{} , targets []string){
+func buildDataToLearn (data []data.Record) (inputs [][]interface{} , targets []string){
 	for i := 0; i<len(data); i++ {
 		if data[i].Null {
 			break
@@ -37,7 +37,7 @@ func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
 			break
 		}
 	}
-	inputs, targets := buildData(resp.Data)
+	inputs, targets := buildDataToLearn(resp.Data)
 	forest := RF.BuildForest(inputs, targets, len(targets), len(inputs),1)
 	return forest
 }
