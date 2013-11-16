@@ -20,7 +20,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 		fmt.Println(err)
 	}
 	labels = make([]string, 6)
-	labels = tmpdata[0]
+	//labels = tmpdata[0]
 	data = make([]Record, len(tmpdata)-1)
 	for i := 1; i<len(tmpdata)-1; i++ {
 		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
