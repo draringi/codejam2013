@@ -94,7 +94,7 @@ func getPastData() []data.Record {
 	}
 	defer func () {_ = db.Close()} ()
 	records := make([]data.Record, 0)
-	var rows sql.Rows
+	var rows *sql.Rows
 	rows, err = db.Query("SELECT * FROM Records;")
 	for rows.Next() {
 		var record data.Record
@@ -159,7 +159,7 @@ func getFutureData() []data.Record{
 	}
 	for i := 0; i < len(WindList); i++ {
 		var err error
-		records[i*4].Time, err = time.Parse(ISO,RadList[i].Date)
+		records[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
 		if err != nil {
 			panic(err)
 		}
