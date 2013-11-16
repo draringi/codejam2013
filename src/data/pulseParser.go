@@ -3,7 +3,7 @@ package data
 import (
 	"net/http"
 	"encoding/xml"
-//	"io"
+	"io"
 	"strconv"
 	"time"
 //	"database/sql"
@@ -44,8 +44,8 @@ type point struct {
 	Records records `xml:"records"`
 }
 
-func parseXmlFloat64 (r io.Reader) [][]record {
-	decoder = xml.NewDecoder(r)
+func parseXmlFloat64 (r io.Reader) []record {
+	decoder := xml.NewDecoder(r)
 	var output point
 	err := decoder.decode(&output)
 	return output.Records.RecordList
