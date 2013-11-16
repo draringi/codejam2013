@@ -24,19 +24,20 @@ func buildData (data []data.Record) (inputs [][]interface{} , targets []float64)
 }
 
 func learnCSV (file io.Reader, channel chan *data.CSVRequest) *RF.Forest {
-	ret := make(chan *CVSData, 1)
+	ret := make(chan *data.CSVData, 1)
 	request := new(data.CSVRequest)
 	request.Return = ret
 	request.Request = file
 	channel <- request
-	var resp CSVData
+	var resp data.CSVData
 	for {
-		if resp <-ret {
+		resp <-ret
+		if resp != nil {
 			break
 		}
 	}
 	inputs, targets := buildData(resp.Data)
-	forest := RF.BuildForrest(inputs, targets, len(targets), len(inputs),1)
+	forest := RF.BuildForest(inputs, targets, len(targets), len(inputs),1)
 	return forest
 }
 	

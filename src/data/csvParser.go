@@ -36,7 +36,7 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 		}
 		data[i-1].Power, err = strconv.ParseFloat(tmpdata[i][2], 32)
 		if err != nil {
-			data[i-1].null = true
+			data[i-1].Null = true
 		}
 	}
 	data = fillRecords (data)

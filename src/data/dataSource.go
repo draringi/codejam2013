@@ -15,7 +15,7 @@ type Record struct {
 	Wind float64
 	Power float64
 	empty bool
-	null bool
+	Null bool
 }
 
 type CVSData struct {
