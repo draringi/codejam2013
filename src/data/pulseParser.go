@@ -44,11 +44,12 @@ type point struct {
 	Records records `xml:"records"`
 }
 
-func parseXmlFloat64 (r io.Reader) [][]record(
+func parseXmlFloat64 (r io.Reader) [][]record {
 	decoder = xml.NewDecoder(r)
 	var output point
 	err := decoder.decode(&output)
 	return output.Records.RecordList
+}
 	
 /*
 func getPastDay () {
