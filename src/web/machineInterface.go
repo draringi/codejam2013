@@ -2,8 +2,8 @@ package web
 
 import (
 	"net/http"
-	"../forecasting"
-	"../data"
+	"draringi/codejam2013/src/forecasting"
+	"draringi/codejam2013/src/data"
 	"encoding/csv"
 	"fmt"
 //	"time"

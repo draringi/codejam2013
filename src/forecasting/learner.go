@@ -3,7 +3,7 @@ package forecasting
 import (
 	"github.com/fxsjy/RF.go/RF"
 	"io"
-	"../data"
+	"draringi/codejam2013/src/data"
 	"strconv"
 )
 

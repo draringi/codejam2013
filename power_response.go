@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"./src/web"
+	"draringi/codejam2013/src/web"
 )
 
 func main() {
