@@ -88,8 +88,9 @@ func creativeUpdate(data []Record) {
 		panic(err)
 	}
 	defer db.Close()
-	statement, staterr := db.Prepare("SELECT merge_db($1, $2, $3, $4, $5, $6);")
-	if staterr != nil {
+	var statement *sql.Stmt
+	statement, err = db.Prepare("SELECT merge_db($1, $2, $3, $4, $5, $6)")
+	if err != nil {
 		panic(err)
 	}
 	defer statement.Close()
