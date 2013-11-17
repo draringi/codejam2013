@@ -7,6 +7,7 @@ import (
 	"draringi/codejam2013/src/data"
     "encoding/json"
     "time"
+    "sync"
 )
 
 type dataError struct {
@@ -30,6 +31,7 @@ type record struct {
 type dashboardHelper struct {
     Data *data.CSVData
     Forcast *future
+    Lock *sync.Mutex
 }
 
 type Dashboard struct {
@@ -38,8 +40,11 @@ type Dashboard struct {
 }
 
 func (self *Dashboard) Init () {
+    self.Lock = new(sync.Mutex)
+    self.Lock.Lock()
 	self.channel = make(chan (*data.CSVData), 1)
     self.JSONAid = new(dashboardHelper)
+    self.Lock.Unlock()
     self.JSONAid.Data = nil
     self.JSONAid.Forcast = nil
 	forecasting.PredictPulse(self.channel)

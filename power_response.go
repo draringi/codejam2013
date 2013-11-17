@@ -8,11 +8,13 @@ import (
 )
 
 func main() {
-    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	machine := new(web.MachineInterface)
-	http.Handle("/upload", machine)
     dashboard := new(web.Dashboard)
+	machine := new(web.MachineInterface)
     go dashboard.Init()
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/upload", machine)
+    dashboard.Lock.Lock()
+    dashboard.Lock.Unlock()
 	http.Handle("/", dashboard)
     http.Handle("/data", dashboard.JSONAid)
 	fmt.Println("listening...")
