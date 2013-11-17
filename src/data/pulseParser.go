@@ -82,20 +82,20 @@ func parseXmlFloat64 (r io.Reader) []record {
 	return output.Records.RecordList
 }
 	
-func creativeUpdate(field string, data []record) {
+func creativeUpdate(data []data.Record) {
 	var db, err = sql.Open(db_provider, db_connection)
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
-	_, err = db.Exec("CREATE FUNCTION merge_"+field+"(key timestamp with time zone, data DOUBLE precision) RETURNS VOID AS $$ BEGIN LOOP UPDATE Records SET "+field+" = data WHERE Time = key; IF found THEN RETURN; END IF; BEGIN INSERT INTO Records(Time,"+field+") VALUES (key, data); RETURN; EXCEPTION WHEN unique_violation THEN END; END LOOP; END; $$ LANGUAGE plpgsql;")
-    statement, staterr := db.Prepare("SELECT merge_"+field+"($1, $2);")
+	_, err = db.Exec("CREATE FUNCTION merge_db(key timestamp with time zone, rad DOUBLE precision, humid DOUBLE precision, temp DOUBLE precision, w DOUBLE precision, pow DOUBLE precision) RETURNS VOID AS $$ BEGIN LOOP UPDATE Records SET Radiation = rad, Humidity=humid, Temperature=temp, Wind=w, Power=pow WHERE Time = key; IF found THEN RETURN; END IF; BEGIN INSERT INTO Records(Time, Radiation, Humidity, Temperature, Wind, Power) VALUES (key, rad, humid, temp, w, pow); RETURN; EXCEPTION WHEN unique_violation THEN END; END LOOP; END; $$ LANGUAGE plpgsql;")
+    statement, staterr := db.Prepare("SELECT merge_db($1, $2, $3, $4, $5, $6);")
     if staterr != nil {
         panic(err)
     }
     defer statement.Close()
 	for i := 0; i < len(data); i++ {
-		_, err = statement.Exec(data[i].Date, data[i].Value)
+		_, err = statement.Exec(data[i].Time, data[i].Radiation, data[i].Humidity, data[i].Temperature, data[i].Wind, data[i].Power)
 		if err != nil {
 			panic(err)
 		}
@@ -139,10 +139,35 @@ func getPastUnit (unit string) {
 	PowerList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	creativeUpdate("Radiation", RadList)
-	creativeUpdate("Humidity", HumidityList)
-	creativeUpdate("Temperature", TempList)
-	creativeUpdate("Wind", WindList)
-	creativeUpdate("Power", PowerList)
+	recordList := buildRecord(RadList, HumidityList, TempList, WindList, PowerList)
+
+	creativeUpdate(recordList)
+
+}
+
+buildRecord(RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record{
+	list := make([]data.Record,len(PowerList))
+	for i := 0; i < len(PowerList); i++ {
+		list[i*4].Empty = true
+		list[i*4].Power = PowerList[i].Value
+	}
+	for i := 0; i < len(RadList); i++ {
+		var err error
+		list[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
+		if err != nil { //If it isn't ISO time, it might be time since epoch
+			var tmp int64
+			tmp, err = strconv.ParseInt(RadList[i].Date, 10, 64)
+			if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
+				panic (err)
+			}
+			records[i].Time = time.Unix(tmp,0)
+		}
+		list[i*4].Radiation = RadList[i].Value
+		list[i*4].Humidity = HumidityList[i].Value
+		list[i*4].Temperature = TempList[i].Value
+		list[i*4].Wind = WindList[i].Value
+		list[i*4].Empty = false
+	}
+	return data.FillRecords(list)
 }
 
