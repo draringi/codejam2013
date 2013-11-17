@@ -41,7 +41,7 @@ type Dashboard struct {
 
 func (self *Dashboard) Init () {
 	self.Lock.Lock()
-	self.channel = make(chan (*data.CSVData), 1)
+	self.channel = make(chan ([]data.Record), 1)
 	self.Data = nil
 	self.Forcast = nil
 	self.Lock.Unlock()
@@ -66,7 +66,7 @@ func (self *Dashboard) Build () {
     Data := self.Data
     self.Forcast = new(future)
     self.Forcast.Records = make([]record,len(Data))
-    for i :=0; i<len(Data.Data); i++ {
+    for i :=0; i<len(Data); i++ {
         self.Forcast.Records[i].Date = Data[i].Time.Format(data.ISO)
         self.Forcast.Records[i].Power = Data[i].Power
     }
