@@ -6,11 +6,12 @@ import (
 	"draringi/codejam2013/src/forecasting"
 	"draringi/codejam2013/src/data"
     "encoding/json"
-//    "time"
+    "time"
 )
 
 type dataError struct {
     What string
+    When time.Time
 }
 
 type future struct {
@@ -68,7 +69,7 @@ func (self *dashboardHelper) jsonify (w io.Writer) error {
         encoder.Encode(self.Forcast)
         return nil
     } else {
-        return "Error: Could not load data"
+        return &dataError{"Error: Could not load data", time.Now()}
     }
 }
 
