@@ -99,7 +99,12 @@ func getPastData() []data.Record {
 	for rows.Next() {
 		var record data.Record
 		var id int
-		err = rows.Scan(&id ,&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
+		var tempTime string
+		err = rows.Scan(&id ,&tempTime, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
+		if err != nil {
+			panic(err)
+		}
+		record.Time, err = time.Parse(data.ISO_LONG, tempTime)
 		if err != nil {
 			panic(err)
 		}
