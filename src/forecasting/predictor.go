@@ -158,7 +158,7 @@ func getFutureData() []data.Record{
 		records[i].Empty = true
 		records[i].Null = true
 	}
-	fmt.Println(strconv.Itoa(len(RadList)) + " -> " +  strconv.Itoa(len(RadList)*4))
+	fmt.Println(strconv.Itoa(len(RadList)) + " -> " +  strconv.Itoa(len(records))
 	for i := 0; i < len(RadList); i++ {
 		fmt.Println(strconv.Itoa(i))
 		var err error
