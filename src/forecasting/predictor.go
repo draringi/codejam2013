@@ -158,8 +158,9 @@ func getFutureData() []data.Record{
 		records[i].Empty = true
 		records[i].Null = true
 	}
+	fmt.Println(Itoa(len(RadList)) + " -> " +  Itoa(len(RadList)*4))
 	for i := 0; i < len(RadList); i++ {
-		fmt.Println(strconv.Itoa(i))
+		fmt.Println(Itoa(i))
 		var err error
 		records[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
 		if err != nil { //If it isn't ISO time, it might be time since epoch
