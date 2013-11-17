@@ -149,7 +149,7 @@ func getPastUnit (unit string) {
 func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record {
 	mult = (len(PowerList)/len(RadList))
 	list := make( []data.Record, len(PowerList) )
-	fmt.Println(strconv.Itoa(mult)
+	fmt.Println(strconv.Itoa(mult))
 	for i := 0; i < len(PowerList); i++ {
 		list[i].Empty = true
 		list[i].Power = PowerList[i].Value
