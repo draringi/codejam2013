@@ -24,11 +24,12 @@ type dashboardHelper struct {
 
 type Dashboard struct {
 	channel chan (*data.CSVData)
-	JSONAid dashboardHelper
+	JSONAid *dashboardHelper
 }
 
 func (self *Dashboard) Init () {
 	self.channel = make(chan (*data.CSVData), 1)
+    JSONAid = new(dashboardHelper)
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
