@@ -23,6 +23,11 @@ type CSVData struct {
 	Data []Record
 }
 
+func AddCSVToDB (file io.Reader) () {
+	_, data := csvParse(file)
+	creativeUpdate(data)
+}
+
 type CSVRequest struct {
 	Request io.Reader
 	Return chan (*CSVData)

@@ -16,6 +16,24 @@ type MachineInterface struct {
 	parser *data.DataSource
 }
 
+type Feeder struct {
+	parser *data.DataSource
+}
+
+func (self *Feeder) ServeHTTP (w http.ResponseWriter, request *http.Request) {
+	if self.parser == nil {
+		self.parser = data.CreateDataSource()
+	}
+	upload, _, err := request.FormFile("file")
+	if err != nil {
+		fmt.Fprint(w, "Error: a file is needed")
+		return
+	}
+	data.AddCSVToDB(upload)
+	fmt.Fprint(w, "Done")
+	return
+}
+
 func recordToString(record data.Record) []string{
 	stringRecord := make([]string, 2)
 	stringRecord[0] = record.Time.Format(data.ISO)
