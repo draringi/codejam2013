@@ -29,7 +29,7 @@ type Dashboard struct {
 
 func (self *Dashboard) Init () {
 	self.channel = make(chan (*data.CSVData), 1)
-    JSONAid = new(dashboardHelper)
+    self.JSONAid = new(dashboardHelper)
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
