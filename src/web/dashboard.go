@@ -36,17 +36,16 @@ type dashboardHelper struct {
 type Dashboard struct {
 	channel chan (*data.CSVData)
 	JSONAid *dashboardHelper
-    Lock *sync.Mutex
+    Lock sync.Mutex
 }
 
 func (self *Dashboard) Init () {
-    self.Lock = new(sync.Mutex)
     self.Lock.Lock()
 	self.channel = make(chan (*data.CSVData), 1)
     self.JSONAid = new(dashboardHelper)
-    self.Lock.Unlock()
     self.JSONAid.Data = nil
     self.JSONAid.Forcast = nil
+    self.Lock.Unlock()
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
