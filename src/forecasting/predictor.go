@@ -160,8 +160,13 @@ func getFutureData() []data.Record{
 	for i := 0; i < len(WindList); i++ {
 		var err error
 		records[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
-		if err != nil {
-			panic(err)
+		if err != nil { //If it isn't ISO time, it might be time since epoch
+			var i int64
+			i, err = strconv.ParseInt(RadList[i].Date, 10, 64)
+			if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
+				panic (err)
+			}
+			records[i*4].Time, err = time.Unix(i,0)
 		}
 		records[i*4].Radiation = RadList[i].Value
 		records[i*4].Humidity = HumidityList[i].Value
