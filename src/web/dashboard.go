@@ -45,7 +45,7 @@ func (self *Dashboard) Init () {
 	self.Data = nil
 	self.Forcast = nil
 	self.Lock.Unlock()
-	forecasting.PredictPulse(self.channel)
+	go forecasting.PredictPulse(self.channel)
 	for {
 		tmp := <-self.channel
 		if tmp != nil {

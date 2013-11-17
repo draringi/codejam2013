@@ -200,24 +200,22 @@ func fillRecords (emptyData []data.Record) (data []data.Record){
 }
 
 func PredictPulse (Data chan (*data.CSVData))  {
-	func () {
-		notify := data.Monitor()
-		for {
-			if <-notify {
-				forest := learnData(getPastData())
-				pred := getFutureData()
-				solution := new(data.CSVData)
-				solution.Labels = make([]string, 6)
-				solution.Data = pred
-				rawData := buildDataToGuess(pred)
-				for i := 0; i < len(pred); i++ {
-					forecast := forest.Predicate(rawData[i])
-					solution.Data[i].Power, _ = strconv.ParseFloat(forecast, 64)
-				}
-				Data <- solution
-			} 
-		}
-	} ()
+	notify := data.Monitor()
+	for {
+		if <-notify {
+			forest := learnData(getPastData())
+			pred := getFutureData()
+			solution := new(data.CSVData)
+			solution.Labels = make([]string, 6)
+			solution.Data = pred
+			rawData := buildDataToGuess(pred)
+			for i := 0; i < len(pred); i++ {
+				forecast := forest.Predicate(rawData[i])
+				solution.Data[i].Power, _ = strconv.ParseFloat(forecast, 64)
+			}
+			Data <- solution
+		} 
+	}
 }
 
 type records struct {
