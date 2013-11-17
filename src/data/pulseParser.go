@@ -132,7 +132,7 @@ func getPastUnit (unit string) {
 	WindList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 	
-	resp, err = getPast(66095, unit) // Power
+	resp, err = getPast(50578, unit) // Power
 	if err != nil {
 		panic(err)
 	}
