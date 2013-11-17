@@ -34,7 +34,10 @@ func stripNull (emptyData []Record) (data []Record) {
 }
 
 func AddCSVToDB (file io.Reader) () {
-	_, data := csvParse(file)
+	, data, err := csvParse(file)
+	if err != err {
+		panic(err)
+	}
 	data = stripNull(data)
 	creativeUpdate(data)
 }
@@ -57,7 +60,7 @@ func CreateDataSource () (*DataSource) {
 			select {
 			case csv := <-data.CSVChan:
 				val := new(CSVData)
-				val.Labels, val.Data = csvParse(csv.Request)
+				val.Labels, val.Data, _ = csvParse(csv.Request)
 				csv.Return <-val
 				
 			case pulse := <-data.PulseChan:
