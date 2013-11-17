@@ -8,7 +8,7 @@ import (
 )
 
 func CSVParse(file io.Reader) (labels []string, data []Record, err error) {
-	labels, data, err = csvParse(file)
+	labels, data, err = csvParseByLine(file)
 	return 
 } 
 
