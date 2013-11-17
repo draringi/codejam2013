@@ -145,11 +145,10 @@ func getPastUnit (unit string) {
 
 }
 
-import "fmt"
 
 func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record {
-	mult = len(PowerList)/len(RadList)
-	list := make([]data.Record,len(PowerList))
+	mult = (len(PowerList)/len(RadList))
+	list := make( []data.Record, len(PowerList) )
 	fmt.Println(strconv.Itoa(mult)
 	for i := 0; i < len(PowerList); i++ {
 		list[i].Empty = true
