@@ -12,6 +12,7 @@ import (
 )
 
 var DB_connection = "user=adminuw6rcgu dbname=2013 password=QaVzpz4-1k3z host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
+var db_connection = DB_connection
 const db_provider = "postgres"
 
 const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
@@ -36,7 +37,7 @@ func Monitor () (chan bool) {
 }
 
 func db_init() {
-	var db, err = sql.Open(db_provider, db_connection)
+	var db, err = sql.Open(DB_provider, db_connection)
 	if err != nil {
 		panic(err)
 	}
