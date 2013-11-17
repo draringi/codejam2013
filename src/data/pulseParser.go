@@ -146,6 +146,7 @@ func getPastUnit (unit string) {
 
 }
 
+const ISO_LONG = "2006-01-02T15:04:05-05:00"
 
 func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []Record {
 	mult := (len(PowerList)/len(RadList))
@@ -157,14 +158,17 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 	}
 	for i := 0; i < len(RadList); i++ {
 		var err error
-		list[i*4].Time, err = time.Parse(time.RFC3339,RadList[i].Date)
-		if err != nil { //If it isn't ISO time, it might be time since epoch
-			var tmp int64
-			tmp, err = strconv.ParseInt(RadList[i].Date, 10, 64)
-			if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
-				panic (err)
+		list[i*mult].Time, err = time.Parse(ISO,RadList[i].Date)
+		if err != nil { //If it isn't ISO time, it might be time since epoch, or ISO-LONG
+			list[i*mult].Time, err = time.Parse(ISO_LONG,RadList[i].Date)
+			if err != nil {
+				var tmp int64
+				tmp, err = strconv.ParseInt(RadList[i].Date, 10, 64)
+				if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
+					panic (err)
+				}
+				list[i*mult].Time = time.Unix(tmp,0)
 			}
-			list[i].Time = time.Unix(tmp,0)
 		}
 		list[i*mult].Radiation = RadList[i].Value
 		list[i*mult].Humidity = HumidityList[i].Value
