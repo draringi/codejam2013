@@ -80,6 +80,6 @@ func (self *dashboardHelper) jsonify (w io.Writer) error {
 func (self *dashboardHelper) ServeHTTP (w http.ResponseWriter, request *http.Request) {
     err := self.jsonify(w)
     if err != nil {
-        http.Error(w,err.What, 404)
+        http.Error(w,err.Error(), 404)
     }
 }
