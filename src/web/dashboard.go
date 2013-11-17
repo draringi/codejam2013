@@ -32,5 +32,5 @@ func (self *Dashboard) Init () {
 }
 
 func (self *Dashboard) ServeHTTP (w http.ResponseWriter, request *http.Request) {
-	fmt.Fprintln(w, "Placeholder")
+	http.ServeFile(w, request, "dashboard.html")
 }
