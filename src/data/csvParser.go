@@ -7,16 +7,16 @@ import (
 	"io"
 )
 
-func CSVParse(file io.Reader) (labels []string, data []Record) {
-	labels, data = csvParse(file)
+func CSVParse(file io.Reader) (labels []string, data []Record, err error) {
+	labels, data, err = csvParse(file)
 	return 
 } 
 
-func csvParse(file io.Reader) (labels []string, data []Record) {
+func csvParse(file io.Reader) (labels []string, data []Record, err error) {
 	reader := csv.NewReader (file)
 	tmpdata, err := reader.ReadAll()
 	if  err != nil {
-		panic(err)
+		return nil, nil, err
 	}
 	labels = tmpdata[0]
 	data  = make([]Record,  len(tmpdata))
@@ -44,7 +44,51 @@ func csvParse(file io.Reader) (labels []string, data []Record) {
 		}
 	}
 	data = FillRecords (data)
-	return
+	return 
+}
+
+func csvParseByLine(file io.Reader) (labels []string, data []Record, err error) {
+	reader := csv.NewReader (file)
+	tmpdata, err := reader.Read()
+	if  err != nil {
+		return nil, nil, err
+	}
+	labels = tmpdata
+	data  = make([]Record, 0)
+	for {
+		tmpdata, err := reader.Read()
+		var rec Record
+		if err == EOF {
+			break
+		} else if err == nil {
+			rec.Time, err = time.Parse(ISO, tmpdata[0])
+			if err != nil {
+				break
+			}
+			rec.Radiation, err = strconv.ParseFloat(tmpdata[1], 64)
+			if err != nil {
+				rec.Empty = true
+			}
+			rec.Humidity, err = strconv.ParseFloat(tmpdata[2], 64)
+			if err != nil {
+				rec.Empty = true
+			}
+			rec.Temperature, err = strconv.ParseFloat(tmpdata[3], 64)
+			if err != nil {
+				rec.Empty = true
+			}
+			rec.Wind, err = strconv.ParseFloat(tmpdata[4], 64)
+			if err != nil {
+				rec.Empty = true
+			}
+			rec.Power, err = strconv.ParseFloat(tmpdata[5], 64)
+			if err != nil {
+				rec.Null = true
+			}
+		}
+	}
+	data = FillRecords (data)
+	return 
 }
 
 func FillRecords (emptyData []Record) (data []Record){

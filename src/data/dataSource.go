@@ -30,6 +30,7 @@ func stripNull (emptyData []Record) (data []Record) {
 			data = append(data, emptyData[i])
 		}
 	}
+	return
 }
 
 func AddCSVToDB (file io.Reader) () {
