@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	"os"
 	_ "github.com/jbarham/gopgsqldriver"
+	"fmt"
 )
 
 var db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
@@ -82,7 +83,7 @@ func parseXmlFloat64 (r io.Reader) []record {
 	return output.Records.RecordList
 }
 	
-func creativeUpdate(data []data.Record) {
+func creativeUpdate(data []Record) {
 	var db, err = sql.Open(db_provider, db_connection)
 	if err != nil {
 		panic(err)
@@ -146,9 +147,9 @@ func getPastUnit (unit string) {
 }
 
 
-func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record {
+func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []Record {
 	mult = (len(PowerList)/len(RadList))
-	list := make( []data.Record, len(PowerList) )
+	list := make( []Record, len(PowerList) )
 	fmt.Println(strconv.Itoa(mult))
 	for i := 0; i < len(PowerList); i++ {
 		list[i].Empty = true
