@@ -34,7 +34,7 @@ func stripNull (emptyData []Record) (data []Record) {
 }
 
 func AddCSVToDB (file io.Reader) () {
-	_, data, err := csvParse(file)
+	_, data, err := csvParseByLine(file)
 	if err != err {
 		panic(err)
 	}
