@@ -150,6 +150,7 @@ const ISO_LONG = "2006-01-02T15:04:05-05:00"
 func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []Record {
 	mult := (len(PowerList)/len(RadList))
 	list := make( []Record, len(PowerList) )
+	var err error
 	for i := 0; i < len(PowerList); i++ {
 		list[i].Empty = true
 		list[i].Power = PowerList[i].Value
@@ -167,7 +168,6 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 		}
 	}
 	for i := 0; i < len(RadList); i++ {
-		var err error
 		list[i*mult].Radiation = RadList[i].Value
 		list[i*mult].Humidity = HumidityList[i].Value
 		list[i*mult].Temperature = TempList[i].Value
