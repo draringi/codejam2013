@@ -166,7 +166,7 @@ func getFutureData() []data.Record{
 			if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
 				panic (err)
 			}
-			records[i*4].Time, err = time.Unix(i,0)
+			records[i*4].Time = time.Unix(i,0)
 		}
 		records[i*4].Radiation = RadList[i].Value
 		records[i*4].Humidity = HumidityList[i].Value
