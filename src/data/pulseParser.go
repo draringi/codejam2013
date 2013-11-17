@@ -93,8 +93,10 @@ func creativeUpdate(data []Record) {
 	if err != nil {
 		panic(err)
 	}
+	err = nil
 	defer statement.Close()
 	for i := 0; i < len(data); i++ {
+		err = nil
 		_, err = statement.Exec(data[i].Time, data[i].Radiation, data[i].Humidity, data[i].Temperature, data[i].Wind, data[i].Power)
 		if err != nil {
 			panic(err)
