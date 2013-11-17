@@ -98,7 +98,8 @@ func getPastData() []data.Record {
 	rows, err = db.Query("SELECT * FROM Records;")
 	for rows.Next() {
 		var record data.Record
-		err = rows.Scan(_ ,&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
+		var id int
+		err = rows.Scan(&id ,&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
 		if err != nil {
 			panic(err)
 		}
