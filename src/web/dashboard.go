@@ -19,7 +19,7 @@ type record struct {
 
 type dashboardHelper struct {
     Data *data.CSVData
-    Forcast future
+    Forcast *future
 }
 
 type Dashboard struct {
@@ -49,8 +49,8 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
     self.Forcast = new(future)
     self.Forcast.Records = make([]record,len(Data.Data))
     for i :=0; i<len(Data.Data); i++ {
-        self.Forcasts.Records[i].Date = Data.Data[i].Time
-        self.Forcasts.Records[i].Power = Data.Data[i].Power
+        self.Forcast.Records[i].Date = Data.Data[i].Time
+        self.Forcast.Records[i].Power = Data.Data[i].Power
     }
 }
 
