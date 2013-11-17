@@ -23,8 +23,18 @@ type CSVData struct {
 	Data []Record
 }
 
+func stripNull (emptyData []Record) (data []Record) {
+	data = make([]Record,0)
+	for i := 0; i < len(emptyData); i++ {
+		if emptyData[i].Null != true {
+			data = append(data, emptyData[i])
+		}
+	}
+}
+
 func AddCSVToDB (file io.Reader) () {
 	_, data := csvParse(file)
+	data = stripNull(data)
 	creativeUpdate(data)
 }
 
