@@ -57,7 +57,11 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
 
 func (self *dashboardHelper) jsonify (w http.ResponseWriter) {
     encoder := json.NewEncoder(w)
-    encoder.Encode(self.Forcast)
+    if self.Data != nil {
+        encoder.Encode(self.Forcast)
+    } else {
+        http.Error(w,"Data not loaded...", 404)
+    }
 }
 
 func (self *dashboardHelper) ServeHTTP (w http.ResponseWriter, request *http.Request) {
