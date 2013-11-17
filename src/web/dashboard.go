@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"draringi/codejam2013/src/forecasting"
 	"draringi/codejam2013/src/data"
-//	"html/template"
-	"fmt"
 )
 
 type dashboardHelper struct {
