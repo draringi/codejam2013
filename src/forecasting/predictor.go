@@ -88,6 +88,10 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	return solution
 }
 
+func GenSTDev (file io.Reader) float64 {
+
+}
+
 const SQLTIME = "2006-01-02 15:04:05+00"
 
 func getPastData() []data.Record {

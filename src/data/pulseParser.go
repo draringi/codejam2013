@@ -37,7 +37,7 @@ func Monitor () (chan bool) {
 }
 
 func db_init() {
-	var db, err = sql.Open(DB_provider, db_connection)
+	var db, err = sql.Open(db_provider, db_connection)
 	if err != nil {
 		panic(err)
 	}
