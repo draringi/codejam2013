@@ -40,22 +40,19 @@ type Dashboard struct {
 }
 
 func (self *Dashboard) Init () {
-    self.Lock.Lock()
+	self.Lock.Lock()
 	self.channel = make(chan (*data.CSVData), 1)
-    self.Data = nil
-    self.Forcast = nil
-    self.Lock.Unlock()
+	self.Data = nil
+	self.Forcast = nil
+	self.Lock.Unlock()
 	forecasting.PredictPulse(self.channel)
-	go func () {
-		for {
-			tmp := <-self.channel
-            if tmp != nil {
-				self.Data = tmp
-                self.Build()
-			}
+	for {
+		tmp := <-self.channel
+		if tmp != nil {
+			self.Data = tmp
+			self.Build()
 		}
-	} ()
-    return
+	}
 }
 
 type Static struct{
