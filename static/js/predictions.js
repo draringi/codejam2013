@@ -1,7 +1,7 @@
 function updateChart (data) {
-	console.log(data);
 	var list = [];
 	var records = data.Records;
+	console.log(records);
 	var len = records;
 	for (var i = 0; i < len; i++) {
 		list.push([records[i].Date, records[i].Power])
