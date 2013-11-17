@@ -14,6 +14,10 @@ type dataError struct {
     When time.Time
 }
 
+func (self *dataError) Error() string {
+    return "["+self.When.Format(data.ISO)+"] " + self.What
+}
+
 type future struct {
     Records []record
 }
