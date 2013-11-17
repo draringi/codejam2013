@@ -31,12 +31,12 @@ type record struct {
 type dashboardHelper struct {
     Data *data.CSVData
     Forcast *future
-    Lock *sync.Mutex
 }
 
 type Dashboard struct {
 	channel chan (*data.CSVData)
 	JSONAid *dashboardHelper
+    Lock *sync.Mutex
 }
 
 func (self *Dashboard) Init () {
