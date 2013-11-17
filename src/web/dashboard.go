@@ -51,6 +51,7 @@ func (self *Dashboard) Init () {
 			}
 		}
 	} ()
+    return
 }
 
 func (self *Dashboard) ServeHTTP (w http.ResponseWriter, request *http.Request) {
