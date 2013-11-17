@@ -1,4 +1,5 @@
 function updateChart (data) {
+	console.log(data);
 	var list = [];
 	var records = data.responseJSON.Records;
 	var len = records;
