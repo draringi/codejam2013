@@ -12,7 +12,8 @@ deps:
 	go install github.com/jbarham/gopgsqldriver
 
 kaguya:
-	cp -R src ~/go/src/draringi/codejam2013
+	cp -fr src ~/go/src/draringi/codejam2013
+    cp -f power_response.go ~/go/src/draringi/codejam2013
 	rm -f ~/go/bin/codejam2013
 	rm -fr ~/go/pkg/linux_amd64/draringi
 	go install draringi/codejam2013
