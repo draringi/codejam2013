@@ -218,7 +218,7 @@ func PredictPulse (Data chan ([]data.Record))  {
 				forecast := forest.Predicate(rawData[i])
 				pred[i].Power, _ = strconv.ParseFloat(forecast, 64)
 			}
-			Data <- solution
+			Data <- pred
 		} 
 	}
 }
