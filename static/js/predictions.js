@@ -5,7 +5,7 @@ function updateChart (data) {
 	for (var i = 0; i < len; i++) {
 		list.push([records[i].Date, records[i].Power])
 	}
-	$.jqplot('chart1', [list], {
+	$.jqplot('futureplot', [list], {
 		title:'Predicted Power Usage for the next 24 Hours',
 		axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
 		series:[{lineWidth:4, markerOptions:{style:'square'}}]
