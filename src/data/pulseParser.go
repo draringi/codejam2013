@@ -142,7 +142,16 @@ func getPastUnit (unit string) {
 	recordList := buildRecord(RadList, HumidityList, TempList, WindList, PowerList)
 
 	creativeUpdate(recordList)
+	cleanDB()
+}
 
+func cleanDB () {
+	var db, err = sql.Open(db_provider, db_connection)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+	_, err = db.Exec("DELETE FROM Records WHERE Power=0")
 }
 
 const ISO_LONG = "2006-01-02T15:04:05-05:00"
@@ -152,27 +161,31 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 	list := make( []Record, len(PowerList) )
 	var err error
 	for i := 0; i < len(PowerList); i++ {
-		list[i].Empty = true
-		list[i].Power = PowerList[i].Value
-		list[i].Time, err = time.Parse(ISO,PowerList[i].Date)
-		if err != nil { //If it isn't ISO time, it might be time since epoch, or ISO-LONG
-			list[i].Time, err = time.Parse(ISO_LONG,PowerList[i].Date)
-			if err != nil {
-				var tmp int64
-				tmp, err = strconv.ParseInt(PowerList[i].Date, 10, 64)
-				if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
-					panic (err)
+		if PowerList[i].Value != 0 {
+			list[i].Empty = true
+			list[i].Power = PowerList[i].Value
+			list[i].Time, err = time.Parse(ISO,PowerList[i].Date)
+			if err != nil { //If it isn't ISO time, it might be time since epoch, or ISO-LONG
+				list[i].Time, err = time.Parse(ISO_LONG,PowerList[i].Date)
+				if err != nil {
+					var tmp int64
+					tmp, err = strconv.ParseInt(PowerList[i].Date, 10, 64)
+					if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
+						panic (err)
+					}
+					list[i].Time = time.Unix(tmp,0)
 				}
-				list[i].Time = time.Unix(tmp,0)
 			}
 		}
 	}
 	for i := 0; i < len(RadList); i++ {
-		list[i*mult].Radiation = RadList[i].Value
-		list[i*mult].Humidity = HumidityList[i].Value
-		list[i*mult].Temperature = TempList[i].Value
-		list[i*mult].Wind = WindList[i].Value
-		list[i*mult].Empty = false
+		if PowerList[i*mult].Value != 0 {
+			list[i*mult].Radiation = RadList[i].Value
+			list[i*mult].Humidity = HumidityList[i].Value
+			list[i*mult].Temperature = TempList[i].Value
+			list[i*mult].Wind = WindList[i].Value
+			list[i*mult].Empty = false
+		}
 	}
 	return FillRecords(list)
 }
