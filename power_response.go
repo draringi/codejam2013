@@ -12,6 +12,7 @@ func main() {
 	dashboard := new(web.Dashboard)
 	http.Handle("/upload", machine)
 	http.Handle("/", dashboard)
+    http.Handle("/data", dashboard.JSONAid)
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	fmt.Println("listening...")
 	err := http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
