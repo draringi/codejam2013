@@ -22,7 +22,7 @@ const month = "month"
 const quarter = (15*time.Minute)
 
 func Monitor () (chan bool) {
-	msg = make(chan bool, 5)
+	msg := make(chan bool, 5)
 	go func () {
 		db_init()
 		getPastUnit(month) //Initialize the db with the past month's data
