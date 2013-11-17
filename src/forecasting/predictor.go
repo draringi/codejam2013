@@ -100,11 +100,11 @@ func getPastData() []data.Record {
 		var record data.Record
 		err = rows.Scan(&record.Time, &record.Radiation, &record.Humidity, &record.Temperature, &record.Wind, &record.Power)
 		if err != nil {
-			record.Empty=true
+			panic(err)
 		}
 		records = append(records, record)
 	}
-	return data.FillRecords(records)
+	return records
 }
 
 func getFuture (id int, duration string) (resp *http.Response, err error) {
@@ -207,19 +207,16 @@ func fillRecords (emptyData []data.Record) (data []data.Record){
 	return emptyData
 }
 
-func PredictPulse (Data chan (*data.CSVData))  {
+func PredictPulse (Data chan ([]data.Record))  {
 	notify := data.Monitor()
 	for {
 		if <-notify {
 			forest := learnData(getPastData())
 			pred := getFutureData()
-			solution := new(data.CSVData)
-			solution.Labels = make([]string, 6)
-			solution.Data = pred
 			rawData := buildDataToGuess(pred)
 			for i := 0; i < len(pred); i++ {
 				forecast := forest.Predicate(rawData[i])
-				solution.Data[i].Power, _ = strconv.ParseFloat(forecast, 64)
+				pred[i].Power, _ = strconv.ParseFloat(forecast, 64)
 			}
 			Data <- solution
 		} 
