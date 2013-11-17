@@ -15,8 +15,8 @@ func main() {
 	http.Handle("/upload", machine)
     dashboard.Lock.Lock()
     dashboard.Lock.Unlock()
-	http.Handle("/", dashboard)
-    http.Handle("/data", dashboard.JSONAid)
+	http.Handle("/", new(web.Static))
+    http.Handle("/data", dashboard)
 	fmt.Println("listening...")
 	err := http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
 	if err != nil {

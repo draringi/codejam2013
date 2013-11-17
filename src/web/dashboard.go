@@ -29,40 +29,44 @@ type record struct {
 }
 
 type dashboardHelper struct {
-    Data *data.CSVData
-    Forcast *future
 }
 
 type Dashboard struct {
 	channel chan (*data.CSVData)
 	JSONAid dashboardHelper
+    Forcast *future
+    Data *data.CSVData
     Lock sync.Mutex
 }
 
 func (self *Dashboard) Init () {
     self.Lock.Lock()
 	self.channel = make(chan (*data.CSVData), 1)
-    self.JSONAid.Data = nil
-    self.JSONAid.Forcast = nil
+    self.Data = nil
+    self.Forcast = nil
     self.Lock.Unlock()
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
 			tmp := <-self.channel
             if tmp != nil {
-				self.JSONAid.Data = tmp
+				self.Data = tmp
+                self.Build()
 			}
 		}
 	} ()
     return
 }
 
-func (self *Dashboard) ServeHTTP (w http.ResponseWriter, request *http.Request) {
+type Static struct{
+}
+
+func (self *Static) ServeHTTP (w http.ResponseWriter, request *http.Request) {
 	http.ServeFile(w, request, "dashboard.html")
 }
 
-func (self *dashboardHelper) Build (Data *data.CSVData) {
-    self.Data = Data
+func (self *Dashboard) Build () {
+    Data := self.Data
     self.Forcast = new(future)
     self.Forcast.Records = make([]record,len(Data.Data))
     for i :=0; i<len(Data.Data); i++ {
@@ -71,7 +75,7 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
     }
 }
 
-func (self *dashboardHelper) jsonify (w io.Writer) error {
+func (self *Dashboard) jsonify (w io.Writer) error {
     encoder := json.NewEncoder(w)
     if self.Data != nil {
         encoder.Encode(self.Forcast)
@@ -81,7 +85,7 @@ func (self *dashboardHelper) jsonify (w io.Writer) error {
     }
 }
 
-func (self *dashboardHelper) ServeHTTP (w http.ResponseWriter, request *http.Request) {
+func (self *Dashboard) ServeHTTP (w http.ResponseWriter, request *http.Request) {
     err := self.jsonify(w)
     if err != nil {
         http.Error(w,err.Error(), 404)
