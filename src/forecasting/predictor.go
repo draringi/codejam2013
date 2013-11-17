@@ -109,7 +109,7 @@ func getPastData() []data.Record {
 
 func getFuture (id int, duration string) (resp *http.Response, err error) {
 	client := new(http.Client)
-	request, err:= http.NewRequest("GET", "https://api.pulseenergy.com/pulse/1/points/"+strconv.Itoa(id)+"/data.xml?interval="+duration+"&start="+strconv.Itoa(time.Now().Unix()), nil)
+	request, err:= http.NewRequest("GET", "https://api.pulseenergy.com/pulse/1/points/"+strconv.Itoa(id)+"/data.xml?interval="+duration+"&start="+strconv.FormatInt(time.Now().Unix(),10), nil)
 	if err != nil {
 		return nil, err
 	}
