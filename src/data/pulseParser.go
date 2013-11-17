@@ -148,7 +148,7 @@ func getPastUnit (unit string) {
 
 
 func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []Record {
-	mult = (len(PowerList)/len(RadList))
+	mult := (len(PowerList)/len(RadList))
 	list := make( []Record, len(PowerList) )
 	fmt.Println(strconv.Itoa(mult))
 	for i := 0; i < len(PowerList); i++ {
@@ -157,7 +157,7 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 	}
 	for i := 0; i < len(RadList); i++ {
 		var err error
-		list[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
+		list[i*4].Time, err = time.Parse(ISO,RadList[i].Date)
 		if err != nil { //If it isn't ISO time, it might be time since epoch
 			var tmp int64
 			tmp, err = strconv.ParseInt(RadList[i].Date, 10, 64)
