@@ -90,7 +90,7 @@ func creativeUpdate(field string, data []record) {
 	defer db.Close()
 	_, err = db.Exec("CREATE FUNCTION merge_$1(key timestamp with time zone, data DOUBLE precision) RETURNS VOID AS $$ BEGIN LOOP UPDATE db SET $1 = data WHERE Time = key; IF found THEN RETURN; END IF; BEGIN INSERT INTO Records(Time,$1) VALUES (key, data); RETURN; EXCEPTION WHEN unique_violation THEN END; END LOOP; END; $$ LANGUAGE plpgsql;", field)
 	for i := 0; i < len(data); i++ {
-		_, err = db.Exec("SELECT merge_db($1, $2);", data[i].Date, data[i].Value)
+		_, err = db.Exec("SELECT merge_$3($1, $2);", data[i].Date, data[i].Value, field)
 		if err != nil {
 			panic(err)
 		}
