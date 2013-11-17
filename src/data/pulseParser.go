@@ -164,7 +164,7 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 			if err != nil { //If it isn't an Integer, and isn't ISO time, I have no idea what's going on.
 				panic (err)
 			}
-			records[i].Time = time.Unix(tmp,0)
+			list[i].Time = time.Unix(tmp,0)
 		}
 		list[i*mult].Radiation = RadList[i].Value
 		list[i*mult].Humidity = HumidityList[i].Value
@@ -172,6 +172,6 @@ func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record)
 		list[i*mult].Wind = WindList[i].Value
 		list[i*mult].Empty = false
 	}
-	return data.FillRecords(list)
+	return FillRecords(list)
 }
 
