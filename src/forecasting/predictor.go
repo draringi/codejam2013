@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"time"
 	"encoding/xml"
-	"fmt"
 )
 
 const quarter = (15*time.Minute)
