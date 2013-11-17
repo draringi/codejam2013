@@ -58,7 +58,7 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
     }
 }
 
-func (self *dashboardHelper) jsonify (w io.) {
+func (self *dashboardHelper) jsonify (w io.Writer) {
     encoder := json.NewEncoder(w)
     if self.Data != nil {
         encoder.Encode(self.Forcast)
