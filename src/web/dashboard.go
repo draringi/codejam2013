@@ -23,7 +23,8 @@ func (self *Dashboard) Init () {
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
-			if tmp := <-self.channel {
+			tmp := <-self.channel
+            if tmp != nil {
 				self.data = tmp
 			}
 		}
