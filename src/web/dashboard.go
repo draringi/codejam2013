@@ -67,7 +67,7 @@ func (self *Dashboard) Build () {
     self.Forcast = new(future)
     self.Forcast.Records = make([]record,len(Data))
     for i :=0; i<len(Data); i++ {
-        self.Forcast.Records[i].Date = Data[i].Time.Format(data.ISO)
+        self.Forcast.Records[i].Date = Data[i].Time.Format(time.ANSIC)
         self.Forcast.Records[i].Power = Data[i].Power
     }
 }
