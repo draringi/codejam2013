@@ -9,6 +9,10 @@ import (
 //    "time"
 )
 
+type dataError struct {
+    What string
+}
+
 type future struct {
     Records []record
 }
@@ -71,6 +75,6 @@ func (self *dashboardHelper) jsonify (w io.Writer) error {
 func (self *dashboardHelper) ServeHTTP (w http.ResponseWriter, request *http.Request) {
     err := self.jsonify(w)
     if err != nil {
-        http.Error(w,err, 404)
+        http.Error(w,err.What, 404)
     }
 }
