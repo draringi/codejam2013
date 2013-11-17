@@ -50,7 +50,7 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
     self.Forcast = new(future)
     self.Forcast.Records = make([]record,len(Data.Data))
     for i :=0; i<len(Data.Data); i++ {
-        self.Forcast.Records[i].Date = Data.Data[i].Time.Format(data.ISO)s
+        self.Forcast.Records[i].Date = Data.Data[i].Time.Format(data.ISO)
         self.Forcast.Records[i].Power = Data.Data[i].Power
     }
 }
