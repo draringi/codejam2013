@@ -152,12 +152,12 @@ func getFutureData() []data.Record{
 	WindList := parseXmlFloat64(resp.Body)
 	resp.Body.Close()
 
-	records := make([]data.Record, 24*4)
+	records := make([]data.Record, len(RadList)*4)
 	for i := 0; i < len(records); i++ {
 		records[i].Empty = true
 		records[i].Null = true
 	}
-	for i := 0; i < len(WindList); i++ {
+	for i := 0; i < len(RadList); i++ {
 		var err error
 		records[i*4].Time, err = time.Parse(data.ISO,RadList[i].Date)
 		if err != nil { //If it isn't ISO time, it might be time since epoch
