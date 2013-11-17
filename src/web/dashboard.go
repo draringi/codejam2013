@@ -1,6 +1,7 @@
 package web
 
 import (
+    "io"
 	"net/http"
 	"draringi/codejam2013/src/forecasting"
 	"draringi/codejam2013/src/data"
@@ -30,6 +31,8 @@ type Dashboard struct {
 func (self *Dashboard) Init () {
 	self.channel = make(chan (*data.CSVData), 1)
     self.JSONAid = new(dashboardHelper)
+    self.JSONAid.Data = nil
+    self.JSONAid.Forcast = nil
 	forecasting.PredictPulse(self.channel)
 	go func () {
 		for {
@@ -55,7 +58,7 @@ func (self *dashboardHelper) Build (Data *data.CSVData) {
     }
 }
 
-func (self *dashboardHelper) jsonify (w http.ResponseWriter) {
+func (self *dashboardHelper) jsonify (w io.) {
     encoder := json.NewEncoder(w)
     if self.Data != nil {
         encoder.Encode(self.Forcast)
