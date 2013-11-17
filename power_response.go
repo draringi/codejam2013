@@ -10,6 +10,7 @@ import (
 func main() {
 	machine := new(web.MachineInterface)
 	dashboard := new(web.Dashboard)
+    dashboard.Init()
 	http.Handle("/upload", machine)
 	http.Handle("/", dashboard)
     http.Handle("/data", dashboard.JSONAid)
