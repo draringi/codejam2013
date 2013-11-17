@@ -12,7 +12,7 @@ func main() {
 	machine := new(web.MachineInterface)
 	http.Handle("/upload", machine)
     dashboard := new(web.Dashboard)
-    dashboard.Init()
+    go dashboard.Init()
 	http.Handle("/", dashboard)
     http.Handle("/data", dashboard.JSONAid)
 	fmt.Println("listening...")
