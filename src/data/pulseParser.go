@@ -145,11 +145,15 @@ func getPastUnit (unit string) {
 
 }
 
-buildRecord(RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record{
+import "fmt"
+
+func buildRecord (RadList, HumidityList, TempList, WindList, PowerList []record) []data.Record {
+	mult = len(PowerList)/len(RadList)
 	list := make([]data.Record,len(PowerList))
+	fmt.Println(strconv.Itoa(mult)
 	for i := 0; i < len(PowerList); i++ {
-		list[i*4].Empty = true
-		list[i*4].Power = PowerList[i].Value
+		list[i].Empty = true
+		list[i].Power = PowerList[i].Value
 	}
 	for i := 0; i < len(RadList); i++ {
 		var err error
@@ -162,11 +166,11 @@ buildRecord(RadList, HumidityList, TempList, WindList, PowerList []record) []dat
 			}
 			records[i].Time = time.Unix(tmp,0)
 		}
-		list[i*4].Radiation = RadList[i].Value
-		list[i*4].Humidity = HumidityList[i].Value
-		list[i*4].Temperature = TempList[i].Value
-		list[i*4].Wind = WindList[i].Value
-		list[i*4].Empty = false
+		list[i*mult].Radiation = RadList[i].Value
+		list[i*mult].Humidity = HumidityList[i].Value
+		list[i*mult].Temperature = TempList[i].Value
+		list[i*mult].Wind = WindList[i].Value
+		list[i*mult].Empty = false
 	}
 	return data.FillRecords(list)
 }
