@@ -25,7 +25,7 @@ func Monitor () (chan bool) {
 	msg := make(chan bool, 5)
 	go func () {
 		db_init()
-		getPastUnit(month) //Initialize the db with the past month's data
+		//getPastUnit(month) //Initialize the db with the past month's data (Currently provides broken data...)
 		for {
 			getPastUnit(day)
 			msg <- true //tell Predicate to update
@@ -42,7 +42,6 @@ func db_init() {
 	}
 	defer db.Close()
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Records (ID SERIAL PRIMARY KEY UNIQUE,Time TIMESTAMP WITH TIME ZONE UNIQUE NOT NULL, Radiation DOUBLE precision, Humidity DOUBLE precision, Temperature DOUBLE precision, Wind DOUBLE precision, Power DOUBLE precision);")
-    _, err = db.Exec("DROP FUNCTION IF EXISTS merge_Radiation ( timestamp with time zone, double precision) ;DROP FUNCTION IF EXISTS merge_Humidity ( timestamp with time zone, double precision) ;DROP FUNCTION IF EXISTS merge_Wind ( timestamp with time zone, double precision) ;DROP FUNCTION IF EXISTS merge_Temperature ( timestamp with time zone, double precision) ;") //clean out the functions, in case they are broken
 }
 
 func getPast (id int, duration string) (resp *http.Response, err error) {
