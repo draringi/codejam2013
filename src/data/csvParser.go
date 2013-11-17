@@ -58,7 +58,7 @@ func csvParseByLine(file io.Reader) (labels []string, data []Record, err error) 
 	for {
 		tmpdata, err := reader.Read()
 		var rec Record
-		if err == EOF {
+		if err == io.EOF {
 			break
 		} else if err == nil {
 			rec.Time, err = time.Parse(ISO, tmpdata[0])
