@@ -17,3 +17,6 @@ function updateChart (data) {
 function getData () {
 	$.getJSON("/data", updateChart);
 }
+
+getData();
+var timerID = setInterval(getData, 3*60*1000)
