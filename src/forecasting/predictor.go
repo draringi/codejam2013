@@ -91,10 +91,9 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 const SQLTIME = "2006-01-02 15:04:05+00"
 
 func getPastData() []data.Record {
-	var db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
 	const db_provider = "postgres"
 
-	var db, err = sql.Open(db_provider, db_connection)
+	var db, err = sql.Open(db_provider, data.DB_connection)
 	if err != nil {
 		panic(err)
 	}

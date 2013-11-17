@@ -11,7 +11,7 @@ import (
 	_ "github.com/jbarham/gopgsqldriver"
 )
 
-var db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
+var DB_connection = "user=adminuw6rcgu dbname=2013 password=QaVzpz4-1k3z host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
 const db_provider = "postgres"
 
 const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
