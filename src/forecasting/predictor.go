@@ -84,7 +84,7 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	return solution
 }
 
-const SQLTIME = "2006-01-02 15:04:05-05"
+const SQLTIME = "2006-01-02 15:04:05Z05"
 
 func getPastData() []data.Record {
 	var db_connection = "user=adminficeuc6 dbname=codejam2013 password=zUSfsRCcvNZf host="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_HOST")+" port="+os.Getenv("OPENSHIFT_POSTGRESQL_DB_PORT")
