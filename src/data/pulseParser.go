@@ -43,6 +43,7 @@ func db_init() {
 	}
 	defer db.Close()
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Records (ID SERIAL PRIMARY KEY UNIQUE,Time TIMESTAMP WITH TIME ZONE UNIQUE NOT NULL, Radiation DOUBLE precision, Humidity DOUBLE precision, Temperature DOUBLE precision, Wind DOUBLE precision, Power DOUBLE precision);")
+    _, err = db.Exec("DROP FUNCTION IF EXISTS merge_Radiation;DROP FUNCTION IF EXISTS merge_Humidity;DROP FUNCTION IF EXISTS merge_Wind;DROP FUNCTION IF EXISTS merge_Temperature;") //clean out the functions, in case they are broken
 }
 
 func getPast (id int, duration string) (resp *http.Response, err error) {
