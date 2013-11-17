@@ -42,6 +42,7 @@ func db_init() {
 	}
 	defer db.Close()
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Records (ID SERIAL PRIMARY KEY UNIQUE,Time TIMESTAMP WITH TIME ZONE UNIQUE NOT NULL, Radiation DOUBLE precision, Humidity DOUBLE precision, Temperature DOUBLE precision, Wind DOUBLE precision, Power DOUBLE precision);")
+	_, err = db.Exec("CREATE FUNCTION merge_db(key timestamp with time zone, rad DOUBLE precision, humid DOUBLE precision, temp DOUBLE precision, w DOUBLE precision, pow DOUBLE precision) RETURNS VOID AS $$ BEGIN LOOP UPDATE Records SET Radiation = rad, Humidity=humid, Temperature=temp, Wind=w, Power=pow WHERE Time = key; IF found THEN RETURN; END IF; BEGIN INSERT INTO Records(Time, Radiation, Humidity, Temperature, Wind, Power) VALUES (key, rad, humid, temp, w, pow); RETURN; EXCEPTION WHEN unique_violation THEN END; END LOOP; END; $$ LANGUAGE plpgsql;")
 }
 
 func getPast (id int, duration string) (resp *http.Response, err error) {
@@ -87,12 +88,11 @@ func creativeUpdate(data []Record) {
 		panic(err)
 	}
 	defer db.Close()
-	_, err = db.Exec("CREATE FUNCTION merge_db(key timestamp with time zone, rad DOUBLE precision, humid DOUBLE precision, temp DOUBLE precision, w DOUBLE precision, pow DOUBLE precision) RETURNS VOID AS $$ BEGIN LOOP UPDATE Records SET Radiation = rad, Humidity=humid, Temperature=temp, Wind=w, Power=pow WHERE Time = key; IF found THEN RETURN; END IF; BEGIN INSERT INTO Records(Time, Radiation, Humidity, Temperature, Wind, Power) VALUES (key, rad, humid, temp, w, pow); RETURN; EXCEPTION WHEN unique_violation THEN END; END LOOP; END; $$ LANGUAGE plpgsql;")
-    statement, staterr := db.Prepare("SELECT merge_db($1, $2, $3, $4, $5, $6);")
-    if staterr != nil {
-        panic(err)
-    }
-    defer statement.Close()
+	statement, staterr := db.Prepare("SELECT merge_db($1, $2, $3, $4, $5, $6);")
+	if staterr != nil {
+		panic(err)
+	}
+	defer statement.Close()
 	for i := 0; i < len(data); i++ {
 		_, err = statement.Exec(data[i].Time, data[i].Radiation, data[i].Humidity, data[i].Temperature, data[i].Wind, data[i].Power)
 		if err != nil {
