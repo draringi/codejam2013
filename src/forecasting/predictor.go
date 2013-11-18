@@ -121,7 +121,7 @@ func GenSTDev (file io.Reader) (result float64) {
 	inputs := buildDataToGuess( Data )
 	guess := Data
 	for i := 0; i < len( Data ); i++ {
-		guess[i], _ = strconv.ParseFloat(forest.Predicate(inputs[i]), 64)
+		guess[i].Power, _ = strconv.ParseFloat(forest.Predicate(inputs[i]), 64)
 	}
 	result, err = stdDev(Data, guess)
 	if err != nil {
