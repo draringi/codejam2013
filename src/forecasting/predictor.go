@@ -97,9 +97,9 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	return solution
 }
 
-func stdDev (correct []Record, guessed []Record) (float64, error) {
+func stdDev (correct []data.Record, guessed []data.Record) (float64, error) {
 	if len(correct) != len(guessed) {
-		return nil, new(bad)
+		return 0, new(bad)
 	}
 	var res float64 = 0.0
 	for i:= 0; i < len(correct); i++ {
@@ -110,7 +110,7 @@ func stdDev (correct []Record, guessed []Record) (float64, error) {
 }
 
 func GenSTDev (file io.Reader) (result float64) {
-	_, Data, err = data.CSVParse(file)
+	_, Data, err := data.CSVParse(file)
 	if err != nil {
 		return -1
 	}
