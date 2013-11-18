@@ -101,7 +101,7 @@ func stdDev (correct []Record, guessed []Record) (float64, error) {
 	if len(correct) != len(guessed) {
 		return nil, new(bad)
 	}
-	var res float64 := 0.0
+	var res float64 = 0.0
 	for i:= 0; i < len(correct); i++ {
 		res = res + math.Abs(correct[i].Power - guessed[i].Power)
 	}
@@ -121,7 +121,7 @@ func GenSTDev (file io.Reader) (result float64) {
 	inputs := buildDataToGuess( Data )
 	guess := Data
 	for i := 0; i < len( Data ); i++ {
-		guess[i] = strconv.forest.ParseFloat(Predicate(inputs[i]), 64)
+		guess[i] = strconv.ParseFloat(forest.Predicate(inputs[i]), 64)
 	}
 	result, err = stdDev(Data, guess)
 	if err != nil {
