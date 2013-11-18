@@ -3,12 +3,13 @@ package forecasting
 import (
 	"net/http"
 	"io"
-	"os"
+//	"os"
 	"database/sql"
 	"draringi/codejam2013/src/data"
 	"strconv"
 	"time"
 	"encoding/xml"
+	"math"
 )
 
 const quarter = (15*time.Minute)
@@ -29,6 +30,14 @@ func buildDataToGuess (data []data.Record) (inputs [][]interface{}){
 	}
 	return
 }
+
+type bad struct {
+}
+
+func (bad *bad) Error () string {
+	return "something bad happened"
+}
+
 
 func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *data.CSVData {
 	forest := learnCSV(file, channel)
@@ -67,8 +76,8 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	if err != nil{
 		panic(err)
 	}
-	forest := learnData( resp.Data)
-	inputs := buildDataToGuess(resp.Data)
+	forest := learnData( resp.Data )
+	inputs := buildDataToGuess( resp.Data )
 	var outputs []string
 	for i := 0; i<len(inputs); i++ {
 		outputs = append (outputs, forest.Predicate(inputs[i]))
@@ -88,8 +97,38 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 	return solution
 }
 
-func GenSTDev (file io.Reader) float64 {
+func stdDev (correct []Record, guessed []Record) (float64, error) {
+	if len(correct) != len(guessed) {
+		return nil, new(bad)
+	}
+	var res float64 := 0.0
+	for i:= 0; i < len(correct); i++ {
+		res = res + math.Abs(correct[i].Power - guessed[i].Power)
+	}
+	res = res / len(correct)
+	return res, nil
+}
 
+func GenSTDev (file io.Reader) (result float64) {
+	_, Data, err = data.CSVParse(file)
+	if err != nil {
+		return -1
+	}
+	forest := learnData( Data )
+	for i := 0; i < len( Data ); i++ {
+		Data[i].Null = true
+	}
+	inputs := buildDataToGuess( Data )
+	guess := Data
+	for i := 0; i < len( Data ); i++ {
+		guess[i] = strconv.forest.ParseFloat(Predicate(inputs[i]), 64)
+	}
+	result, err = stdDev(Data, guess)
+	if err != nil {
+		return -1
+	} else {
+		return result
+	}
 }
 
 const SQLTIME = "2006-01-02 15:04:05+00"
