@@ -8,18 +8,18 @@ import (
 )
 
 func CSVParse(file io.Reader) (labels []string, data []Record, err error) {
-	labels, data, err = csvParseByLine(file)
+	labels, data, err = csvParse(file)
 	return 
 } 
 
 func csvParse(file io.Reader) (labels []string, data []Record, err error) {
-	reader := csv.NewReader (file)
+	reader := csv.NewReader( file )
 	tmpdata, err := reader.ReadAll()
 	if  err != nil {
 		return nil, nil, err
 	}
 	labels = tmpdata[0]
-	data  = make([]Record,  len(tmpdata))
+	data  = make([]Record, len(tmpdata)-1)
 	for i := 1; i<len(tmpdata); i++ {
 		data[i-1].Time, _ = time.Parse(ISO, tmpdata[i][0])
 		data[i-1].Radiation, err = strconv.ParseFloat(tmpdata[i][1], 64)

@@ -14,6 +14,8 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.Handle("/upload", machine)
 	http.Handle("/feed", new(web.Feeder))
+	http.Handle("/stddev", new(web.StdDev))
+	http.Handle("/conf", new(web.Confidence))
 	dashboard.Lock.Lock()
 	http.Handle("/", new(web.Static))
 	http.Handle("/data", dashboard)

@@ -8,16 +8,18 @@ import (
 )
 
 func buildDataToLearn (data []data.Record) (inputs [][]interface{} , targets []string){
-	for i := 0; i<len(data); i++ {
+	for i := 0; i< len(data); i++ {
 		if data[i].Null {
 			break
 		}
-		row := make([]interface{},5)
+		row := make([]interface{}, 7)
 		row[0]=data[i].Time
-		row[1]=data[i].Radiation
-		row[2]=data[i].Humidity
-		row[3]=data[i].Temperature
-		row[4]=data[i].Wind
+		row[1]=data[i].Time.Day()
+		row[2]=data[i].Time.Hour()
+		row[3]=data[i].Radiation
+		row[4]=data[i].Humidity
+		row[5]=data[i].Temperature
+		row[6]=data[i].Wind
 		inputs = append(inputs,row)
 		targets = append(targets,strconv.FormatFloat(data[i].Power,'f', -1, 64))
 	}

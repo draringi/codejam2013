@@ -17,14 +17,16 @@ const apikey = "B25ECB703CD25A1423DC2B1CF8E6F008"
 const day = "day"
 
 func buildDataToGuess (data []data.Record) (inputs [][]interface{}){
-	for i := 0; i<len(data); i++ {
+	for i := 0; i< len(data) ; i++ {
 		if data[i].Null {
-			row := make([]interface{},5)
+			row := make([]interface{},7)
 			row[0]=data[i].Time
-			row[1]=data[i].Radiation
-			row[2]=data[i].Humidity
-			row[3]=data[i].Temperature
-			row[4]=data[i].Wind
+			row[1]=data[i].Time.Day()
+			row[2]=data[i].Time.Hour()
+			row[3]=data[i].Radiation
+			row[4]=data[i].Humidity
+			row[5]=data[i].Temperature
+			row[6]=data[i].Wind
 			inputs = append(inputs,row)
 		}
 	}
@@ -69,12 +71,12 @@ func PredictCSV (file io.Reader, channel chan *data.CSVRequest) *data.CSVData {
 	return resp
 }
 
-func PredictCSVSingle (file io.Reader) *data.CSVData {
+func PredictCSVSingle (file io.Reader) (*data.CSVData, error) {
 	resp := new(data.CSVData)
 	var err error
 	resp.Labels, resp.Data, err = data.CSVParse(file)
 	if err != nil{
-		panic(err)
+		return nil, err
 	}
 	forest := learnData( resp.Data )
 	inputs := buildDataToGuess( resp.Data )
@@ -94,7 +96,7 @@ func PredictCSVSingle (file io.Reader) *data.CSVData {
 			resp.Data[i].Null = false
 		}
 	}
-	return solution
+	return solution, nil
 }
 
 func stdDev (correct []data.Record, guessed []data.Record) (float64, error) {
